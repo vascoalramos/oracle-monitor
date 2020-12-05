@@ -1,0 +1,37 @@
+{
+    "name": "aidauci-rest-api",
+    "version": "1.0.0",
+    "description": "AIDA UCI Rest API",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/vascoalramos/aidauci.git"
+    },
+    "keywords": [
+        "Javascript",
+        "Node.js",
+        "Express.js"
+    ],
+    "author": "Vasco Ramos",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/vascoalramos/aidauci/issues"
+    },
+    "homepage": "https://github.com/vascoalramos/aidauci/blob/main/README.md",
+    "main": "bin/www",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node bin/www",
+        "develop": "nodemon bin/www"
+    },
+    "dependencies": {
+        "cookie-parser": "~1.4.4",
+        "cors": "^2.8.5",
+        "express": "~4.16.1",
+        "morgan": "~1.9.1",
+        "oracledb": "^5.0.0"
+    },
+    "devDependencies": {
+        "debug": "~2.6.9",
+        "nodemon": "^2.0.6"
+    }
+}
