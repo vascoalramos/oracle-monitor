@@ -59,7 +59,7 @@ npm run start
 
 -   **Carolina Marques:** [CarolinaRMarques](https://github.com/CarolinaRMarques)
 -   **Francisco Borges:** [AlbertinoDias](https://github.com/AlbertinoDias)
--   **Rui Pereira:** [???](https://github.com/???)
+-   **Rui Pereira:** [rpcbp](https://github.com/rpcbp)
 -   **Vasco Ramos:** [vascoalramos](https://vascoalramos.me)
 
 ## License
