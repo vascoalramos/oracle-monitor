@@ -23,7 +23,7 @@ def pdb_query():
 
 
 def insert_pdb_entries(pdb_rows):
-    sql = "insert into pdb_history(name, con_id, total_size, tstp) values(:name,:con_id,:total_size,:tstp)"
+    sql = "insert into pdb_history(name, con_id, total_size, tstp) values(:name, :con_id, :total_size, :tstp)"
 
     with cx_Oracle.connect(
         config.username2, config.password2, config.dsn2, encoding=config.encoding
