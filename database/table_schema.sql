@@ -1,10 +1,15 @@
-DROP TABLE cpu_history;
-DROP TABLE datafile_history;
-DROP TABLE memory_history;
-DROP TABLE pdb_history;
-DROP TABLE session_history;
-DROP TABLE tablespace_history;
-DROP TABLE users;
+DROP MATERIALIZED VIEW datafile_mat_view;
+DROP MATERIALIZED VIEW pdb_mat_view;
+DROP MATERIALIZED VIEW tablespace_mat_view;
+
+DROP TABLE cpu_history CASCADE CONSTRAINTS;
+DROP TABLE datafile_history CASCADE CONSTRAINTS;
+DROP TABLE memory_history CASCADE CONSTRAINTS;
+DROP TABLE pdb_history CASCADE CONSTRAINTS;
+DROP TABLE session_history CASCADE CONSTRAINTS;
+DROP TABLE tablespace_history CASCADE CONSTRAINTS;
+DROP TABLE users CASCADE CONSTRAINTS;
+
 
 -- cpu_history
 CREATE TABLE cpu_history (
@@ -65,7 +70,7 @@ COMMENT ON COLUMN pdb_history.total_size IS
 CREATE TABLE session_history (
     sid       NUMBER NOT NULL,
     con_id    NUMBER NOT NULL,
-    username  VARCHAR2(128 BYTE) NOT NULL,
+    username  VARCHAR2(128 BYTE),
     status    VARCHAR2(8 BYTE) NOT NULL,
     program   VARCHAR2(48 BYTE) NOT NULL,
     type      VARCHAR2(10 BYTE) NOT NULL,
@@ -101,5 +106,59 @@ CREATE TABLE users (
     account_status      VARCHAR2(32 BYTE) NOT NULL,
     default_tablespace  VARCHAR2(30 BYTE) NOT NULL,
     temp_tablespace     VARCHAR2(30 BYTE) NOT NULL,
-    last_login          TIMESTAMP WITH LOCAL TIME ZONE NOT NULL
+    last_login          TIMESTAMP WITH LOCAL TIME ZONE
 );
+
+
+-- datafile_mat_view
+CREATE MATERIALIZED VIEW datafile_mat_view (
+    tablespace_name,
+    datafile_name
+)
+    REFRESH
+        COMPLETE
+        ON COMMIT
+AS
+    SELECT
+        tablespace_name,
+        datafile_name
+    FROM
+        datafile_history
+    GROUP BY
+        tablespace_name,
+        datafile_name;
+
+
+-- pdb_mat_view
+CREATE MATERIALIZED VIEW pdb_mat_view (
+    name,
+    con_id
+)
+    REFRESH
+        COMPLETE
+        ON COMMIT
+AS
+    SELECT
+        name,
+        con_id
+    FROM
+        pdb_history
+    GROUP BY
+        name,
+        con_id;
+
+
+-- tablespace_mat_view
+CREATE MATERIALIZED VIEW tablespace_mat_view (
+    name
+)
+    REFRESH
+        COMPLETE
+        ON COMMIT
+AS
+    SELECT
+        name
+    FROM
+        tablespace_history
+    GROUP BY
+        name;
