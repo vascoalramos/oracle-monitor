@@ -70,7 +70,7 @@ COMMENT ON COLUMN pdb_history.total_size IS
 CREATE TABLE session_history (
     sid       NUMBER NOT NULL,
     con_id    NUMBER NOT NULL,
-    username  VARCHAR2(128 BYTE) NOT NULL,
+    username  VARCHAR2(128 BYTE),
     status    VARCHAR2(8 BYTE) NOT NULL,
     program   VARCHAR2(48 BYTE) NOT NULL,
     type      VARCHAR2(10 BYTE) NOT NULL,
@@ -106,7 +106,7 @@ CREATE TABLE users (
     account_status      VARCHAR2(32 BYTE) NOT NULL,
     default_tablespace  VARCHAR2(30 BYTE) NOT NULL,
     temp_tablespace     VARCHAR2(30 BYTE) NOT NULL,
-    last_login          TIMESTAMP WITH LOCAL TIME ZONE NOT NULL
+    last_login          TIMESTAMP WITH LOCAL TIME ZONE
 );
 
 
