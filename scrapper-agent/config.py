@@ -1,6 +1,6 @@
 port = 1512
-
 encoding = "UTF-8"
+
 username = "sys"
 password = "Oradoc_db1"
 dsn = "localhost/ORCLCDB.localdomain"

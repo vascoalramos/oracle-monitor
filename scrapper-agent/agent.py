@@ -25,16 +25,13 @@ def pdb_query():
 def insert_pdb_entries(pdb_rows):
     sql = "insert into pdb_history(name, con_id, total_size, tstp) values(:name,:con_id,:total_size,:tstp)"
 
-    try:
-        with cx_Oracle.connect(
-            config.username2, config.password2, config.dsn2, encoding=config.encoding
-        ) as connection:
-            with connection.cursor() as cursor:
-                cursor.setinputsizes(None, None, None, cx_Oracle.TIMESTAMP)
-                cursor.executemany(sql, pdb_rows)
-                connection.commit()
-    except cx_Oracle.Error as error:
-        print("Error occurred: " + error)
+    with cx_Oracle.connect(
+        config.username2, config.password2, config.dsn2, encoding=config.encoding
+    ) as connection:
+        with connection.cursor() as cursor:
+            cursor.setinputsizes(None, None, None, cx_Oracle.TIMESTAMP)
+            cursor.executemany(sql, pdb_rows)
+            connection.commit()
 
 
 try:
