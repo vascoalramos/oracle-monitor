@@ -28,14 +28,14 @@ def pdb_query():
                 insert_pdb_entries(rows)
 
 
-def insert_pdb_entries(pdb_rows):
+def insert_pdb_entries(rows):
     sql = "insert into pdb_history(name, con_id, total_size, tstp) values(:name, :con_id, :total_size, :tstp)"
     with cx_Oracle.connect(
         config.username2, config.password2, config.dsn2, encoding=config.encoding
     ) as connection:
         with connection.cursor() as cursor:
             cursor.setinputsizes(None, None, None, cx_Oracle.TIMESTAMP)
-            cursor.executemany(sql, pdb_rows)
+            cursor.executemany(sql, rows)
             connection.commit()
 
 
@@ -56,7 +56,7 @@ def session_query():
                 insert_session_entries(rows)
 
 
-def insert_session_entries(pdb_rows):
+def insert_session_entries(rows):
     sql = "insert into session_history(sid, con_id, username, status, program, type, tstp) values(:sid, :con_id, :username, :status, :program, :type, :tstp)"
     with cx_Oracle.connect(
         config.username2, config.password2, config.dsn2, encoding=config.encoding
@@ -65,7 +65,7 @@ def insert_session_entries(pdb_rows):
             cursor.setinputsizes(
                 None, None, None, None, None, None, cx_Oracle.TIMESTAMP
             )
-            cursor.executemany(sql, pdb_rows)
+            cursor.executemany(sql, rows)
             connection.commit()
 
 
@@ -86,14 +86,14 @@ def memory_query():
                 insert_memory_entries(rows)
 
 
-def insert_memory_entries(pdb_rows):
+def insert_memory_entries(rows):
     sql = "insert into memory_history(total, used, tstp) values(:total, :used, :tstp)"
     with cx_Oracle.connect(
         config.username2, config.password2, config.dsn2, encoding=config.encoding
     ) as connection:
         with connection.cursor() as cursor:
             cursor.setinputsizes(None, None, cx_Oracle.TIMESTAMP)
-            cursor.executemany(sql, pdb_rows)
+            cursor.executemany(sql, rows)
             connection.commit()
 
 
@@ -114,7 +114,7 @@ def tablespaces_query():
                 insert_tablespaces_entries(rows)
 
 
-def insert_tablespaces_entries(pdb_rows):
+def insert_tablespaces_entries(rows):
     sql = "insert into tablespace_history(name, total, free, used, percentage_free, percentage_used, tstp) values(:name, :total, :free, :used, :percentage_free, :percentage_used, :tstp)"
     with cx_Oracle.connect(
         config.username2, config.password2, config.dsn2, encoding=config.encoding
@@ -123,7 +123,7 @@ def insert_tablespaces_entries(pdb_rows):
             cursor.setinputsizes(
                 None, None, None, None, None, None, cx_Oracle.TIMESTAMP
             )
-            cursor.executemany(sql, pdb_rows)
+            cursor.executemany(sql, rows)
             connection.commit()
 
 
@@ -144,8 +144,8 @@ def datafiles_query():
                 insert_datafiles_entries(rows)
 
 
-def insert_datafiles_entries(pdb_rows):
-    sql = "insert into datafile_history(tablespace_name, datafile_name, total, free, used, percentage_free, percentage_used,tstp) values(:tablespace_name,:file_name,:total,:free,:used,:percentage_free,:percentage_used,:tstp)"
+def insert_datafiles_entries(rows):
+    sql = "insert into datafile_history(tablespace_name, datafile_name, total, free, used, percentage_free, percentage_used, tstp) values(:tablespace_name, :file_name, :total, :free, :used, :percentage_free, :percentage_used, :tstp)"
     with cx_Oracle.connect(
         config.username2, config.password2, config.dsn2, encoding=config.encoding
     ) as connection:
@@ -153,7 +153,7 @@ def insert_datafiles_entries(pdb_rows):
             cursor.setinputsizes(
                 None, None, None, None, None, None, None, cx_Oracle.TIMESTAMP
             )
-            cursor.executemany(sql, pdb_rows)
+            cursor.executemany(sql, rows)
             connection.commit()
 
 
@@ -174,7 +174,7 @@ def users_query():
                 insert_entry_entries(rows)
 
 
-def insert_users_entries(pdb_rows):
+def insert_users_entries(rows):
     sql = "insert into datafile_history(tablespace_name, datafile_name, total, free, used, percentage_free, percentage_used,tstp) values(:tablespace_name,:file_name,:total,:free,:used,:percentage_free,:percentage_used,:tstp)"
 
     with cx_Oracle.connect(
@@ -184,7 +184,7 @@ def insert_users_entries(pdb_rows):
             cursor.setinputsizes(
                 None, None, None, None, None, None, None, cx_Oracle.TIMESTAMP
             )
-            cursor.executemany(sql, pdb_rows)
+            cursor.executemany(sql, rows)
             connection.commit()
 
 
@@ -192,8 +192,8 @@ try:
     # pdb_query()
     # session_query()
     # memory_query()
-    tablespaces_query()
-    # datafiles_query()
+    # tablespaces_query()
+    datafiles_query()
     # users_query()
 except cx_Oracle.Error as error:
     print("Error occurred: " + error)
