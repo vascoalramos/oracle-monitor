@@ -6,6 +6,7 @@ from sql_queries import (
     memory_sql,
     tablespaces_sql,
     datafiles_sql,
+    users_sql,
 )
 
 batch_size = 20
@@ -166,34 +167,31 @@ def users_query():
         encoding=config.encoding,
     ) as connection:
         with connection.cursor() as cursor:
-            cursor.execute(datafiles_sql)
+            cursor.execute(users_sql)
             while True:
                 rows = cursor.fetchmany(batch_size)
                 if not rows:
                     break
-                insert_entry_entries(rows)
+                insert_users_entries(rows)
 
 
 def insert_users_entries(rows):
-    sql = "insert into datafile_history(tablespace_name, datafile_name, total, free, used, percentage_free, percentage_used,tstp) values(:tablespace_name,:file_name,:total,:free,:used,:percentage_free,:percentage_used,:tstp)"
-
+    sql = "insert into users(user_id, username, account_status, default_tablespace, temp_tablespace, last_login) values(:user_id, :username, :account_status, :default_tablespace, :temp_tablespace, :last_login)"
     with cx_Oracle.connect(
         config.username2, config.password2, config.dsn2, encoding=config.encoding
     ) as connection:
         with connection.cursor() as cursor:
-            cursor.setinputsizes(
-                None, None, None, None, None, None, None, cx_Oracle.TIMESTAMP
-            )
+            cursor.setinputsizes(None, None, None, None, None, cx_Oracle.TIMESTAMP)
             cursor.executemany(sql, rows)
             connection.commit()
 
 
 try:
-    # pdb_query()
-    # session_query()
-    # memory_query()
-    # tablespaces_query()
+    pdb_query()
+    session_query()
+    memory_query()
+    tablespaces_query()
     datafiles_query()
-    # users_query()
+    users_query()
 except cx_Oracle.Error as error:
     print("Error occurred: " + error)

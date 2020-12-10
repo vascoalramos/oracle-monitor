@@ -2,7 +2,7 @@ pdb_sql = "select name, con_id, round(total_size / (1024*1024*1024), 2) as total
 
 sessions_sql = "select sid, con_id, username, status, program, 'type', CURRENT_TIMESTAMP from V$SESSION"
 
-memory_sql = '''select T as total, U as used, CURRENT_TIMESTAMP
+memory_sql = """select T as total, U as used, CURRENT_TIMESTAMP
     from dual
     inner join (
         select sum(pga_max_mem)/1024/1024 "U", 'X' "DUMMY"
@@ -11,9 +11,9 @@ memory_sql = '''select T as total, U as used, CURRENT_TIMESTAMP
     inner join (
         select  sum(value)/1024/1024 "T", 'X' "DUMMY"
         from v$sga
-    ) "B" on dual.DUMMY = "B".DUMMY'''
+    ) "B" on dual.DUMMY = "B".DUMMY"""
 
-tablespaces_sql = '''select b.tablespace_name,
+tablespaces_sql = """select b.tablespace_name,
     tbs_size total,
     a.free_space free,
     round(tbs_size - a.free_space) used,
@@ -35,9 +35,9 @@ tablespaces_sql = '''select b.tablespace_name,
        100 - round(((tablespace_size / (1024*1024)) - (free_space / (1024*1024))) / (tablespace_size / (1024*1024)) * 100) percentage_free,
        round(((tablespace_size / (1024*1024)) - (free_space / (1024*1024))) / (tablespace_size / (1024*1024)) * 100) percentage_used,
         CURRENT_TIMESTAMP
-    FROM dba_temp_free_space'''
+    FROM dba_temp_free_space"""
 
-datafiles_sql = '''select tablespace_name, file_name, total, free, used, percentage_used, percentage_free, CURRENT_TIMESTAMP
+datafiles_sql = """select tablespace_name, file_name, total, free, used, percentage_used, percentage_free, CURRENT_TIMESTAMP
     from (select d.tablespace_name,
 	    d.file_id,
 	    d.file_name,
@@ -68,7 +68,6 @@ datafiles_sql = '''select tablespace_name, file_name, total, free, used, percent
 	    (select tablespace_name, allocated_space bytes from dba_temp_free_space
 		group by tablespace_name, allocated_space) f
 	where d.tablespace_name = f.tablespace_name(+)
-	order by tablespace_name'''
+	order by tablespace_name"""
 
-users_sql = '''select user_id, username, account_status, default_tablespace, temporary_tablespace, last_login, CURRENT_TIMESTAMP from dba_users'''
-
+users_sql = """select user_id, username, account_status, default_tablespace, temporary_tablespace, last_login from dba_users"""

@@ -2,7 +2,7 @@
 select con_id, name, round(total_size / (1024*1024*1024), 2) as total_size_gb, CURRENT_TIMESTAMP from V$PDBS;
 
 -- query for users
-select user_id, username, account_status, default_tablespace, temporary_tablespace, last_login, CURRENT_TIMESTAMP from dba_users;
+select user_id, username, account_status, default_tablespace, temporary_tablespace, last_login from dba_users;
 
 -- query for sessions
 select sid, con_id, username, status, program, 'type', CURRENT_TIMESTAMP from V$SESSION;
