@@ -83,17 +83,16 @@ def memory_query():
                 rows = cursor.fetchmany(batch_size)
                 if not rows:
                     break
-                insert_session_entries(rows)
+                insert_memory_entries(rows)
 
 
 def insert_memory_entries(pdb_rows):
-    sql = "insert into memory_history(total,used,tstp) values(:total,:used,:tstp)"
+    sql = "insert into memory_history(total, used, tstp) values(:total, :used, :tstp)"
     with cx_Oracle.connect(
         config.username2, config.password2, config.dsn2, encoding=config.encoding
     ) as connection:
         with connection.cursor() as cursor:
             cursor.setinputsizes(None, None, cx_Oracle.TIMESTAMP)
-            print(pdb_rows)
             cursor.executemany(sql, pdb_rows)
             connection.commit()
 
