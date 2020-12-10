@@ -115,12 +115,14 @@ def tablespaces_query():
 
 
 def insert_tablespaces_entries(pdb_rows):
-    sql = "insert into tablespace_history(name, total, free, used, percentage_free, percentage_used,tstp) values(:tablespace_name,:total,:used,:percentage_free,:percentage_used,:tstp)"
+    sql = "insert into tablespace_history(name, total, free, used, percentage_free, percentage_used, tstp) values(:name, :total, :free, :used, :percentage_free, :percentage_used, :tstp)"
     with cx_Oracle.connect(
         config.username2, config.password2, config.dsn2, encoding=config.encoding
     ) as connection:
         with connection.cursor() as cursor:
-            cursor.setinputsizes(None, None, None, None, None, cx_Oracle.TIMESTAMP)
+            cursor.setinputsizes(
+                None, None, None, None, None, None, cx_Oracle.TIMESTAMP
+            )
             cursor.executemany(sql, pdb_rows)
             connection.commit()
 
@@ -189,8 +191,8 @@ def insert_users_entries(pdb_rows):
 try:
     # pdb_query()
     # session_query()
-    memory_query()
-    # tablespaces_query()
+    # memory_query()
+    tablespaces_query()
     # datafiles_query()
     # users_query()
 except cx_Oracle.Error as error:
