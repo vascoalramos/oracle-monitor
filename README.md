@@ -16,10 +16,12 @@
 
 #### Prerequisites
 
+Install Oracle Instant Client: https://www.oracle.com/database/technologies/instant-client/linux-x86-64-downloads.html#ic_x64_inst
+
 ```bash
 # install necessary software
 sudo apt-get install python3-venv
-pip install virtualenv
+pip3 install virtualenv
 
 # install env software (python)
 cd scrapper-agent
