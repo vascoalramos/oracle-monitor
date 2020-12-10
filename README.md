@@ -10,6 +10,32 @@
 -   tablespace_history (name, total, free, used, percentage_free, percentage_used, tstp)
 -   datafile_history (tablespace_name, datafile_name, total, free, used, percentage_free, percentage_used, tstp)
 
+## Run Software
+
+### Scrapper Agent (Python)
+
+#### Prerequisites
+
+```bash
+# install necessary software
+sudo apt-get install python3-venv
+pip install virtualenv
+
+# install env software (python)
+cd scrapper-agent
+python3 -m venv venv
+source venv/bin/activate
+pip3 install -r requirements.txt
+```
+
+#### How to run
+
+```bash
+cd scrapper-agent
+source env/bin/activate
+python3 agent.py
+```
+
 ## Authors
 
 -   **Carolina Marques:** [CarolinaRMarques](https://github.com/CarolinaRMarques)

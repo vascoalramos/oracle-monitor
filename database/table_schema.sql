@@ -1,22 +1,19 @@
-DROP TABLE cpu_history CASCADE CONSTRAINTS;
+DROP TABLE cpu_history;
+DROP TABLE datafile_history;
+DROP TABLE memory_history;
+DROP TABLE pdb_history;
+DROP TABLE session_history;
+DROP TABLE tablespace_history;
+DROP TABLE users;
 
-DROP TABLE datafile_history CASCADE CONSTRAINTS;
-
-DROP TABLE memory_history CASCADE CONSTRAINTS;
-
-DROP TABLE pdb_history CASCADE CONSTRAINTS;
-
-DROP TABLE session_history CASCADE CONSTRAINTS;
-
-DROP TABLE tablespace_history CASCADE CONSTRAINTS;
-
-DROP TABLE users CASCADE CONSTRAINTS;
-
+-- cpu_history
 CREATE TABLE cpu_history (
     value  NUMBER NOT NULL,
     tstp   TIMESTAMP WITH LOCAL TIME ZONE DEFAULT systimestamp NOT NULL
 );
 
+
+-- datafile_history
 CREATE TABLE datafile_history (
     tablespace_name  VARCHAR2(30 BYTE) NOT NULL,
     datafile_name    VARCHAR2(513 BYTE) NOT NULL,
@@ -37,15 +34,8 @@ COMMENT ON COLUMN datafile_history.free IS
 COMMENT ON COLUMN datafile_history.used IS
     '(MB)';
 
-CREATE UNIQUE INDEX datafile_history_pk ON
-    datafile_history (
-        datafile_name
-    ASC );
 
-ALTER TABLE datafile_history
-    ADD CONSTRAINT datafile_history_pk PRIMARY KEY ( datafile_name )
-        USING INDEX datafile_history_pk;
-
+-- memory_history
 CREATE TABLE memory_history (
     total  NUMBER NOT NULL,
     used   NUMBER NOT NULL,
@@ -58,6 +48,8 @@ COMMENT ON COLUMN memory_history.total IS
 COMMENT ON COLUMN memory_history.used IS
     '(MB)';
 
+
+-- pdb_history
 CREATE TABLE pdb_history (
     name        VARCHAR2(128 BYTE) NOT NULL,
     con_id      NUMBER NOT NULL,
@@ -68,15 +60,8 @@ CREATE TABLE pdb_history (
 COMMENT ON COLUMN pdb_history.total_size IS
     '(GB)';
 
-CREATE UNIQUE INDEX pdb_history_pk ON
-    pdb_history (
-        name
-    ASC );
 
-ALTER TABLE pdb_history
-    ADD CONSTRAINT pdb_history_pk PRIMARY KEY ( name )
-        USING INDEX pdb_history_pk;
-
+-- session_history
 CREATE TABLE session_history (
     sid       NUMBER NOT NULL,
     con_id    NUMBER NOT NULL,
@@ -87,15 +72,8 @@ CREATE TABLE session_history (
     tstp      TIMESTAMP WITH LOCAL TIME ZONE DEFAULT systimestamp NOT NULL
 );
 
-CREATE UNIQUE INDEX session_history_pk ON
-    session_history (
-        sid
-    ASC );
 
-ALTER TABLE session_history
-    ADD CONSTRAINT session_history_pk PRIMARY KEY ( sid )
-        USING INDEX session_history_pk;
-
+-- tablespace_history
 CREATE TABLE tablespace_history (
     name             VARCHAR2(30 BYTE) NOT NULL,
     total            NUMBER NOT NULL,
@@ -115,15 +93,8 @@ COMMENT ON COLUMN tablespace_history.free IS
 COMMENT ON COLUMN tablespace_history.used IS
     '(MB)';
 
-CREATE UNIQUE INDEX tablespace_history_pk ON
-    tablespace_history (
-        name
-    ASC );
 
-ALTER TABLE tablespace_history
-    ADD CONSTRAINT tablespace_history_pk PRIMARY KEY ( name )
-        USING INDEX tablespace_history_pk;
-
+-- users
 CREATE TABLE users (
     user_id             NUMBER NOT NULL,
     username            VARCHAR2(128 BYTE) NOT NULL,
@@ -132,18 +103,3 @@ CREATE TABLE users (
     temp_tablespace     VARCHAR2(30 BYTE) NOT NULL,
     last_login          TIMESTAMP WITH LOCAL TIME ZONE NOT NULL
 );
-
-CREATE UNIQUE INDEX users_pk ON
-    users (
-        user_id
-    ASC );
-
-ALTER TABLE users
-    ADD CONSTRAINT users_pk PRIMARY KEY ( user_id )
-        USING INDEX users_pk;
-
-ALTER TABLE datafile_history
-    ADD CONSTRAINT datafile_history_fk1 FOREIGN KEY ( tablespace_name )
-        REFERENCES tablespace_history ( name )
-            ON DELETE CASCADE
-    NOT DEFERRABLE;

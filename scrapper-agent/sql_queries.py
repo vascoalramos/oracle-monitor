@@ -1,0 +1,1 @@
+pdb_sql = "select name, con_id, round(total_size / (1024*1024*1024), 2) as total_size_gb, CURRENT_TIMESTAMP from V$PDBS"
