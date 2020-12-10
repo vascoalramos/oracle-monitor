@@ -19,24 +19,20 @@ def pdb_query():
                 rows = cursor.fetchmany(batch_size)
                 if not rows:
                     break
-                for row in rows:
-                    insert_pdb_entry(row)
+                insert_pdb_entries(rows)
 
 
-def insert_pdb_entry(pdb_row):
-    sql = (
-        "insert into pdb_history(name, con_id, total_size, tstp) "
-        "values(:name,:con_id,:total_size,:tstp)"
-    )
+def insert_pdb_entries(pdb_rows):
+    sql = "insert into pdb_history(name, con_id, total_size, tstp) values(:name,:con_id,:total_size,:tstp)"
 
     try:
         # establish a new connection
         with cx_Oracle.connect(
-            config.username2, config.password2, config.dsn, encoding=config.encoding
+            config.username2, config.password2, config.dsn2, encoding=config.encoding
         ) as connection:
             with connection.cursor() as cursor:
                 cursor.setinputsizes(None, None, None, cx_Oracle.TIMESTAMP)
-                cursor.execute(sql, [pdb_row[0], pdb_row[1], pdb_row[2], pdb_row[3]])
+                cursor.executemany(sql, pdb_rows)
                 connection.commit()
     except cx_Oracle.Error as error:
         print("Error occurred:")
