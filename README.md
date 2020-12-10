@@ -12,7 +12,7 @@
 
 ## Run Software
 
-### Scrapper Agent (Python)
+### Scrapper Agent
 
 #### Prerequisites
 
@@ -34,6 +34,23 @@ pip3 install -r requirements.txt
 cd scrapper-agent
 source env/bin/activate
 python3 agent.py
+```
+
+### Rest API
+
+#### Prerequisites
+
+```bash
+# install dependencies
+cd rest-api
+npm install
+```
+
+#### How to run
+
+```bash
+cd rest-api
+npm run start
 ```
 
 ## Authors
