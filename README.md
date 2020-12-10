@@ -4,9 +4,9 @@
 
 -   pdb_history (name, con_id, total_size, tstp)
 -   users (user_id, username, account_status, default_tablespace, temporary_tablespace, last_login)
--   session_history (sid, con_id, username, status, program, type, tstp: `select sid, con_id, username, status, program, 'type' from V$SESSION;`)
+-   session_history (sid, con_id, username, status, program, type, tstp)
 -   cpu_history (value (%), tstp)
--   memory_history (total, used, tstp: check sql of vilaça repo)
+-   memory_history (total, used, tstp)
 -   tablespace_history (name, total, free, used, percentage_free, percentage_used, tstp)
 -   datafile_history (tablespace_name, datafile_name, total, free, used, percentage_free, percentage_used, tstp)
 
