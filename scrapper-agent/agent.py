@@ -1,6 +1,12 @@
 import cx_Oracle
 import config
-from sql_queries import pdb_sql,sessions_sql, memory_sql, tablespaces_sql, datafiles_sql
+from sql_queries import (
+    pdb_sql,
+    sessions_sql,
+    memory_sql,
+    tablespaces_sql,
+    datafiles_sql,
+)
 
 batch_size = 20
 
@@ -33,7 +39,7 @@ def insert_pdb_entries(pdb_rows):
             connection.commit()
 
 
-def pdb_query_session():
+def session_query():
     with cx_Oracle.connect(
         config.username,
         config.password,
@@ -56,12 +62,14 @@ def insert_session_entries(pdb_rows):
         config.username2, config.password2, config.dsn2, encoding=config.encoding
     ) as connection:
         with connection.cursor() as cursor:
-            cursor.setinputsizes(None, None, None, None, None, None, cx_Oracle.TIMESTAMP)
-            print(pdb_rows)
+            cursor.setinputsizes(
+                None, None, None, None, None, None, cx_Oracle.TIMESTAMP
+            )
             cursor.executemany(sql, pdb_rows)
             connection.commit()
 
-def pdb_query_memory():
+
+def memory_query():
     with cx_Oracle.connect(
         config.username,
         config.password,
@@ -85,11 +93,12 @@ def insert_memory_entries(pdb_rows):
     ) as connection:
         with connection.cursor() as cursor:
             cursor.setinputsizes(None, None, cx_Oracle.TIMESTAMP)
-            print (pdb_rows)
+            print(pdb_rows)
             cursor.executemany(sql, pdb_rows)
             connection.commit()
 
-def pdb_query_tablespaces():
+
+def tablespaces_query():
     with cx_Oracle.connect(
         config.username,
         config.password,
@@ -112,11 +121,12 @@ def insert_tablespaces_entries(pdb_rows):
         config.username2, config.password2, config.dsn2, encoding=config.encoding
     ) as connection:
         with connection.cursor() as cursor:
-            cursor.setinputsizes(None, None, None,None, None, cx_Oracle.TIMESTAMP)
+            cursor.setinputsizes(None, None, None, None, None, cx_Oracle.TIMESTAMP)
             cursor.executemany(sql, pdb_rows)
             connection.commit()
 
-def pdb_query_datafiles():
+
+def datafiles_query():
     with cx_Oracle.connect(
         config.username,
         config.password,
@@ -139,11 +149,14 @@ def insert_datafiles_entries(pdb_rows):
         config.username2, config.password2, config.dsn2, encoding=config.encoding
     ) as connection:
         with connection.cursor() as cursor:
-            cursor.setinputsizes(None, None, None,None, None, None, None, cx_Oracle.TIMESTAMP)
+            cursor.setinputsizes(
+                None, None, None, None, None, None, None, cx_Oracle.TIMESTAMP
+            )
             cursor.executemany(sql, pdb_rows)
             connection.commit()
 
-def pdb_query_users():
+
+def users_query():
     with cx_Oracle.connect(
         config.username,
         config.password,
@@ -167,14 +180,19 @@ def insert_users_entries(pdb_rows):
         config.username2, config.password2, config.dsn2, encoding=config.encoding
     ) as connection:
         with connection.cursor() as cursor:
-            cursor.setinputsizes(None, None, None, None, None, None,None, cx_Oracle.TIMESTAMP)
+            cursor.setinputsizes(
+                None, None, None, None, None, None, None, cx_Oracle.TIMESTAMP
+            )
             cursor.executemany(sql, pdb_rows)
             connection.commit()
 
+
 try:
-   # pdb_query()
-   # pdb_query_session()
-    pdb_query_memory()
-   # pdb_query_tablespaces()
+    # pdb_query()
+    # session_query()
+    memory_query()
+    # tablespaces_query()
+    # datafiles_query()
+    # users_query()
 except cx_Oracle.Error as error:
     print("Error occurred: " + error)
