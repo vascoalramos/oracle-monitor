@@ -35,12 +35,11 @@ def insert_pdb_entries(pdb_rows):
                 cursor.executemany(sql, pdb_rows)
                 connection.commit()
     except cx_Oracle.Error as error:
-        print("Error occurred:")
-        print(error)
+        print("Error occurred: " + error)
 
 
 try:
     pdb_query()
 
 except cx_Oracle.Error as error:
-    print(error)
+    print("Error occurred: " + error)
