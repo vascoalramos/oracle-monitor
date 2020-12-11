@@ -11,7 +11,7 @@ CREATE OR REPLACE VIEW view_pdb_history_per_minute AS
 
 CREATE OR REPLACE VIEW view_pdb_history_per_hour AS
     SELECT
-        con_id,
+        con_id, 
         name,
         AVG(total_size) AS total_size,
         TO_CHAR(tstp, 'YYYY/MM/DD HH24') AS tstp
