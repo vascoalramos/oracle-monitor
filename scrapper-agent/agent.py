@@ -233,8 +233,7 @@ def run_agent():
 
 
 def main():
-    run_agent()
-    while False:
+    while True:
         run_agent()
         time.sleep(30)
 
