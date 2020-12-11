@@ -4,10 +4,10 @@ const controller = require("../controllers/user");
 
 let router = express.Router();
 
-// GET users history
-router.get("/history", (req, res) => {
+// GET users
+router.get("/", (req, res) => {
     controller
-        .list_history()
+        .list()
         .then((data) => {
             res.status(200).jsonp(data);
         })
