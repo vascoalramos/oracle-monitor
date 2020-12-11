@@ -30,7 +30,7 @@ def pdb_query():
 
 
 def insert_pdb_entries(rows):
-    sql = "insert into pdb_history(name, con_id, total_size, tstp) values(:name, :con_id, :total_size, :tstp)"
+    sql = "insert into pdb_values(name, con_id, total_size, tstp) values(:name, :con_id, :total_size, :tstp)"
     with cx_Oracle.connect(
         config.username2, config.password2, config.dsn2, encoding=config.encoding
     ) as connection:
@@ -58,7 +58,7 @@ def session_query():
 
 
 def insert_session_entries(rows):
-    sql = "insert into session_history(sid, con_id, username, status, program, type, tstp) values(:sid, :con_id, :username, :status, :program, :type, :tstp)"
+    sql = "insert into session_values(sid, con_id, username, status, program, type, tstp) values(:sid, :con_id, :username, :status, :program, :type, :tstp)"
     with cx_Oracle.connect(
         config.username2, config.password2, config.dsn2, encoding=config.encoding
     ) as connection:
@@ -88,12 +88,51 @@ def memory_query():
 
 
 def insert_memory_entries(rows):
-    sql = "insert into memory_history(total, used, tstp) values(:total, :used, :tstp)"
+    sql = "insert into memory_values(total, used, tstp) values(:total, :used, :tstp)"
     with cx_Oracle.connect(
         config.username2, config.password2, config.dsn2, encoding=config.encoding
     ) as connection:
         with connection.cursor() as cursor:
             cursor.setinputsizes(None, None, cx_Oracle.TIMESTAMP)
+            cursor.executemany(sql, rows)
+            connection.commit()
+
+
+def users_query():
+    delete_users()
+    with cx_Oracle.connect(
+        config.username,
+        config.password,
+        config.dsn,
+        cx_Oracle.SYSDBA,
+        encoding=config.encoding,
+    ) as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(users_sql)
+            while True:
+                rows = cursor.fetchmany(batch_size)
+                if not rows:
+                    break
+                insert_users_entries(rows)
+
+
+def delete_users():
+    sql = "truncate table users"
+    with cx_Oracle.connect(
+        config.username2, config.password2, config.dsn2, encoding=config.encoding
+    ) as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            connection.commit()
+
+
+def insert_users_entries(rows):
+    sql = "insert into users(username, user_id, account_status, default_tablespace, temp_tablespace, last_login) values(:username, :user_id, :account_status, :default_tablespace, :temp_tablespace, :last_login)"
+    with cx_Oracle.connect(
+        config.username2, config.password2, config.dsn2, encoding=config.encoding
+    ) as connection:
+        with connection.cursor() as cursor:
+            cursor.setinputsizes(None, None, None, None, None, cx_Oracle.TIMESTAMP)
             cursor.executemany(sql, rows)
             connection.commit()
 
@@ -158,53 +197,14 @@ def insert_datafiles_entries(rows):
             connection.commit()
 
 
-def users_query():
-    delete_users()
-    with cx_Oracle.connect(
-        config.username,
-        config.password,
-        config.dsn,
-        cx_Oracle.SYSDBA,
-        encoding=config.encoding,
-    ) as connection:
-        with connection.cursor() as cursor:
-            cursor.execute(users_sql)
-            while True:
-                rows = cursor.fetchmany(batch_size)
-                if not rows:
-                    break
-                insert_users_entries(rows)
-
-
-def delete_users():
-    sql = "truncate table users"
-    with cx_Oracle.connect(
-        config.username2, config.password2, config.dsn2, encoding=config.encoding
-    ) as connection:
-        with connection.cursor() as cursor:
-            cursor.execute(sql)
-            connection.commit()
-
-
-def insert_users_entries(rows):
-    sql = "insert into users(user_id, username, account_status, default_tablespace, temp_tablespace, last_login) values(:user_id, :username, :account_status, :default_tablespace, :temp_tablespace, :last_login)"
-    with cx_Oracle.connect(
-        config.username2, config.password2, config.dsn2, encoding=config.encoding
-    ) as connection:
-        with connection.cursor() as cursor:
-            cursor.setinputsizes(None, None, None, None, None, cx_Oracle.TIMESTAMP)
-            cursor.executemany(sql, rows)
-            connection.commit()
-
-
 def run_agent():
     try:
         pdb_query()
-        # session_query()
-        # memory_query()
+        session_query()
+        memory_query()
+        users_query()
         # tablespaces_query()
         # datafiles_query()
-        # users_query()
     except cx_Oracle.Error as error:
         print("Error occurred: " + error)
 

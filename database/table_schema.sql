@@ -136,8 +136,8 @@ COMMENT ON COLUMN tablespace_values.used IS
 
 -- users
 CREATE TABLE users (
-    user_id             NUMBER NOT NULL,
     username            VARCHAR2(128 BYTE) NOT NULL,
+    user_id             NUMBER NOT NULL,
     account_status      VARCHAR2(32 BYTE) NOT NULL,
     default_tablespace  VARCHAR2(30 BYTE) NOT NULL,
     temp_tablespace     VARCHAR2(30 BYTE) NOT NULL,

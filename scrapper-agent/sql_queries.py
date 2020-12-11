@@ -1,15 +1,15 @@
 pdb_sql = "select name, con_id, round(total_size / (1024*1024*1024), 2) as total_size_gb, CURRENT_TIMESTAMP from V$PDBS"
 
-sessions_sql = "select sid, con_id, username, status, program, 'type', CURRENT_TIMESTAMP from V$SESSION"
+sessions_sql = "select sid, con_id, username, status, program, type, CURRENT_TIMESTAMP from V$SESSION"
 
 memory_sql = """select T as total, U as used, CURRENT_TIMESTAMP
     from dual
     inner join (
-        select sum(pga_max_mem)/1024/1024 "U", 'X' "DUMMY"
+        select round(sum(pga_max_mem)/1024/1024) "U", 'X' "DUMMY"
         from v$process
     ) "A" on dual.DUMMY = "A".DUMMY
     inner join (
-        select  sum(value)/1024/1024 "T", 'X' "DUMMY"
+        select round(sum(value)/1024/1024) "T", 'X' "DUMMY"
         from v$sga
     ) "B" on dual.DUMMY = "B".DUMMY"""
 
@@ -70,4 +70,4 @@ datafiles_sql = """select tablespace_name, file_name, total, free, used, percent
 	where d.tablespace_name = f.tablespace_name(+)
 	order by tablespace_name"""
 
-users_sql = """select user_id, username, account_status, default_tablespace, temporary_tablespace, last_login from dba_users"""
+users_sql = "select username, user_id, account_status, default_tablespace, temporary_tablespace, last_login from dba_users"
