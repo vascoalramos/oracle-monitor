@@ -1,6 +1,6 @@
-DROP MATERIALIZED VIEW datafile_mat_view;
-DROP MATERIALIZED VIEW pdb_mat_view;
-DROP MATERIALIZED VIEW tablespace_mat_view;
+DROP MATERIALIZED VIEW mat_view_datafile;
+DROP MATERIALIZED VIEW mat_view_pdb;
+DROP MATERIALIZED VIEW mat_view_tablespace;
 
 DROP TABLE cpu_history CASCADE CONSTRAINTS;
 DROP TABLE datafile_history CASCADE CONSTRAINTS;
@@ -110,8 +110,8 @@ CREATE TABLE users (
 );
 
 
--- datafile_mat_view
-CREATE MATERIALIZED VIEW datafile_mat_view (
+-- mat_view_datafile
+CREATE MATERIALIZED VIEW mat_view_datafile (
     tablespace_name,
     datafile_name
 )
@@ -129,8 +129,8 @@ AS
         datafile_name;
 
 
--- pdb_mat_view
-CREATE MATERIALIZED VIEW pdb_mat_view (
+-- mat_view_pdb
+CREATE MATERIALIZED VIEW mat_view_pdb (
     name,
     con_id
 )
@@ -148,8 +148,8 @@ AS
         con_id;
 
 
--- tablespace_mat_view
-CREATE MATERIALIZED VIEW tablespace_mat_view (
+-- mat_view_tablespace
+CREATE MATERIALIZED VIEW mat_view_tablespace (
     name
 )
     REFRESH
