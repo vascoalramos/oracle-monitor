@@ -34,8 +34,8 @@ pip3 install -r requirements.txt
 
 ```bash
 cd scrapper-agent
-source env/bin/activate
-python3 agent.py
+source venv/bin/activate
+python3 agent.py &
 ```
 
 ### Rest API

@@ -1,5 +1,5 @@
-import cx_Oracle
-import config
+import cx_Oracle, config, time 
+from multiprocessing import Process
 from sql_queries import (
     pdb_sql,
     sessions_sql,
@@ -196,6 +196,10 @@ def insert_users_entries(rows):
             cursor.executemany(sql, rows)
             connection.commit()
 
+def runTimed():
+    while True:
+        main()
+        time.sleep(30)
 
 def main():
     try:
@@ -210,4 +214,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    runTimed()
+
+
