@@ -1,4 +1,4 @@
-import cx_Oracle, config, time 
+import cx_Oracle, config, time
 from multiprocessing import Process
 from sql_queries import (
     pdb_sql,
@@ -196,12 +196,8 @@ def insert_users_entries(rows):
             cursor.executemany(sql, rows)
             connection.commit()
 
-def runTimed():
-    while True:
-        main()
-        time.sleep(30)
 
-def main():
+def run_agent():
     try:
         pdb_query()
         session_query()
@@ -213,7 +209,11 @@ def main():
         print("Error occurred: " + error)
 
 
+def main():
+    while True:
+        run_agent()
+        time.sleep(30)
+
+
 if __name__ == "__main__":
-    runTimed()
-
-
+    main()
