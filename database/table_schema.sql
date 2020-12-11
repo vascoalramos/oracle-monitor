@@ -1,3 +1,5 @@
+DROP MATERIALIZED VIEW mat_view_pdb;
+
 DROP TABLE cpu_values CASCADE CONSTRAINTS;
 DROP TABLE datafile CASCADE CONSTRAINTS;
 DROP TABLE datafile_values CASCADE CONSTRAINTS;
@@ -160,3 +162,22 @@ ALTER TABLE tablespace_values
         REFERENCES tablespace ( name )
             ON DELETE CASCADE
     NOT DEFERRABLE;
+
+
+-- mat_view_pdb
+CREATE MATERIALIZED VIEW mat_view_pdb (
+    name,
+    con_id
+)
+    REFRESH
+        COMPLETE
+        ON COMMIT
+AS
+    SELECT
+        name,
+        con_id
+    FROM
+        pdb_values
+    GROUP BY
+        name,
+        con_id;
