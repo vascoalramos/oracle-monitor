@@ -10,6 +10,7 @@ DROP TABLE tablespace CASCADE CONSTRAINTS;
 DROP TABLE tablespace_values CASCADE CONSTRAINTS;
 DROP TABLE users CASCADE CONSTRAINTS;
 
+
 -- cpu_values
 CREATE TABLE cpu_values (
     value  NUMBER NOT NULL,
@@ -23,21 +24,22 @@ CREATE TABLE datafile (
     datafile_name    VARCHAR2(513 BYTE) NOT NULL
 );
 
-CREATE UNIQUE INDEX datafile_pk ON
+CREATE UNIQUE INDEX datafile_pk1 ON
     datafile (
         datafile_name
-    ASC )
-        TABLESPACE aebd_tables PCTFREE 10
-            STORAGE ( PCTINCREASE 0 MINEXTENTS 1 MAXEXTENTS UNLIMITED FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT )
-        LOGGING;
+    ASC,
+        tablespace_name
+    ASC );
 
 ALTER TABLE datafile
-    ADD CONSTRAINT datafile_pk PRIMARY KEY ( datafile_name )
-        USING INDEX datafile_pk;
+    ADD CONSTRAINT datafile_pk PRIMARY KEY ( datafile_name,
+                                             tablespace_name )
+        USING INDEX datafile_pk1;
 
 
 -- datafile_values
 CREATE TABLE datafile_values (
+    tablespace_name  VARCHAR2(30 BYTE) NOT NULL,
     datafile_name    VARCHAR2(513 BYTE) NOT NULL,
     total            NUMBER NOT NULL,
     free             NUMBER NOT NULL,
@@ -103,10 +105,7 @@ CREATE TABLE tablespace (
 CREATE UNIQUE INDEX tablespace_pk ON
     tablespace (
         name
-    ASC )
-        TABLESPACE aebd_tables PCTFREE 10
-            STORAGE ( PCTINCREASE 0 MINEXTENTS 1 MAXEXTENTS UNLIMITED FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT )
-        LOGGING;
+    ASC );
 
 ALTER TABLE tablespace
     ADD CONSTRAINT tablespace_pk PRIMARY KEY ( name )
@@ -145,25 +144,6 @@ CREATE TABLE users (
 );
 
 
--- constraints
-ALTER TABLE datafile
-    ADD CONSTRAINT datafile_fk1 FOREIGN KEY ( tablespace_name )
-        REFERENCES tablespace ( name )
-    NOT DEFERRABLE;
-
-ALTER TABLE datafile_values
-    ADD CONSTRAINT datafile_history_fk1 FOREIGN KEY ( datafile_name )
-        REFERENCES datafile ( datafile_name )
-            ON DELETE CASCADE
-    NOT DEFERRABLE;
-
-ALTER TABLE tablespace_values
-    ADD CONSTRAINT tablespace_history_fk1 FOREIGN KEY ( name )
-        REFERENCES tablespace ( name )
-            ON DELETE CASCADE
-    NOT DEFERRABLE;
-
-
 -- mat_view_pdb
 CREATE MATERIALIZED VIEW mat_view_pdb (
     name,
@@ -181,3 +161,21 @@ AS
     GROUP BY
         name,
         con_id;
+
+ALTER TABLE datafile
+    ADD CONSTRAINT datafile_fk1 FOREIGN KEY ( tablespace_name )
+        REFERENCES tablespace ( name )
+    NOT DEFERRABLE;
+
+ALTER TABLE datafile_values
+    ADD CONSTRAINT datafile_values_fk1 FOREIGN KEY ( datafile_name,
+                                                     tablespace_name )
+        REFERENCES datafile ( datafile_name,
+                                        tablespace_name )
+    NOT DEFERRABLE;
+
+ALTER TABLE tablespace_values
+    ADD CONSTRAINT tablespace_history_fk1 FOREIGN KEY ( name )
+        REFERENCES tablespace ( name )
+            ON DELETE CASCADE
+    NOT DEFERRABLE;

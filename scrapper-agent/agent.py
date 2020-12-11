@@ -14,9 +14,9 @@ batch_size = 20
 
 def pdb_query():
     with cx_Oracle.connect(
-        config.username,
-        config.password,
-        config.dsn,
+        config.username_root,
+        config.password_root,
+        config.dsn_root,
         cx_Oracle.SYSDBA,
         encoding=config.encoding,
     ) as connection:
@@ -45,7 +45,6 @@ def session_query():
         config.username,
         config.password,
         config.dsn,
-        cx_Oracle.SYSDBA,
         encoding=config.encoding,
     ) as connection:
         with connection.cursor() as cursor:
@@ -75,7 +74,6 @@ def memory_query():
         config.username,
         config.password,
         config.dsn,
-        cx_Oracle.SYSDBA,
         encoding=config.encoding,
     ) as connection:
         with connection.cursor() as cursor:
@@ -104,7 +102,6 @@ def users_query():
         config.username,
         config.password,
         config.dsn,
-        cx_Oracle.SYSDBA,
         encoding=config.encoding,
     ) as connection:
         with connection.cursor() as cursor:
@@ -142,7 +139,6 @@ def tablespaces_query():
         config.username,
         config.password,
         config.dsn,
-        cx_Oracle.SYSDBA,
         encoding=config.encoding,
     ) as connection:
         with connection.cursor() as cursor:
@@ -151,11 +147,23 @@ def tablespaces_query():
                 rows = cursor.fetchmany(batch_size)
                 if not rows:
                     break
-                insert_tablespaces_entries(rows)
+                insert_tablespaces([{"tablespace_name": row[0]} for row in rows])
+                insert_tablespaces_values(rows)
 
 
-def insert_tablespaces_entries(rows):
-    sql = "insert into tablespace_history(name, total, free, used, percentage_free, percentage_used, tstp) values(:name, :total, :free, :used, :percentage_free, :percentage_used, :tstp)"
+def insert_tablespaces(tablespaces):
+    sql = "merge into tablespace using dual on (tablespace.name =:tablespace_name) when not matched then insert (name) VALUES (:tablespace_name)"
+    with cx_Oracle.connect(
+        config.username2, config.password2, config.dsn2, encoding=config.encoding
+    ) as connection:
+        with connection.cursor() as cursor:
+
+            cursor.executemany(sql, tablespaces)
+            connection.commit()
+
+
+def insert_tablespaces_values(rows):
+    sql = "insert into tablespace_values(name, total, free, used, percentage_free, percentage_used, tstp) values(:name, :total, :free, :used, :percentage_free, :percentage_used, :tstp)"
     with cx_Oracle.connect(
         config.username2, config.password2, config.dsn2, encoding=config.encoding
     ) as connection:
@@ -172,7 +180,6 @@ def datafiles_query():
         config.username,
         config.password,
         config.dsn,
-        cx_Oracle.SYSDBA,
         encoding=config.encoding,
     ) as connection:
         with connection.cursor() as cursor:
@@ -181,11 +188,27 @@ def datafiles_query():
                 rows = cursor.fetchmany(batch_size)
                 if not rows:
                     break
-                insert_datafiles_entries(rows)
+                insert_datafiles(
+                    [
+                        {"tablespace_name": row[0], "datafile_name": row[1]}
+                        for row in rows
+                    ]
+                )
+                insert_datafiles_values(rows)
 
 
-def insert_datafiles_entries(rows):
-    sql = "insert into datafile_history(tablespace_name, datafile_name, total, free, used, percentage_free, percentage_used, tstp) values(:tablespace_name, :file_name, :total, :free, :used, :percentage_free, :percentage_used, :tstp)"
+def insert_datafiles(datafiles):
+    sql = "merge into datafile using dual on (datafile.tablespace_name=:tablespace_name and datafile.datafile_name=:datafile_name) when not matched then insert (tablespace_name, datafile_name) VALUES (:tablespace_name, :datafile_name)"
+    with cx_Oracle.connect(
+        config.username2, config.password2, config.dsn2, encoding=config.encoding
+    ) as connection:
+        with connection.cursor() as cursor:
+            cursor.executemany(sql, datafiles)
+            connection.commit()
+
+
+def insert_datafiles_values(rows):
+    sql = "insert into datafile_values(tablespace_name, datafile_name, total, free, used, percentage_free, percentage_used, tstp) values(:tablespace_name, :file_name, :total, :free, :used, :percentage_free, :percentage_used, :tstp)"
     with cx_Oracle.connect(
         config.username2, config.password2, config.dsn2, encoding=config.encoding
     ) as connection:
@@ -203,14 +226,15 @@ def run_agent():
         session_query()
         memory_query()
         users_query()
-        # tablespaces_query()
-        # datafiles_query()
+        tablespaces_query()
+        datafiles_query()
     except cx_Oracle.Error as error:
         print("Error occurred: " + error)
 
 
 def main():
-    while True:
+    run_agent()
+    while False:
         run_agent()
         time.sleep(30)
 
