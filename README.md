@@ -37,6 +37,8 @@ cd scrapper-agent
 source venv/bin/activate
 python3 agent.py &
 ```
+### How to kill process
+When running agent.py it will return a pid. kill <pid> will kill this process 
 
 ### Rest API
 
