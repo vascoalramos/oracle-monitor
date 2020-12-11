@@ -200,11 +200,11 @@ def insert_users_entries(rows):
 def run_agent():
     try:
         pdb_query()
-        session_query()
-        memory_query()
-        tablespaces_query()
-        datafiles_query()
-        users_query()
+        # session_query()
+        # memory_query()
+        # tablespaces_query()
+        # datafiles_query()
+        # users_query()
     except cx_Oracle.Error as error:
         print("Error occurred: " + error)
 
