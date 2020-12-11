@@ -1,10 +1,10 @@
 const express = require("express");
 
-const controller = require("../controllers/pdb");
+const controller = require("../controllers/tablespace");
 
 let router = express.Router();
 
-// GET pdbs
+// GET tablespaces
 router.get("/", (req, res) => {
     controller
         .list()
@@ -16,7 +16,7 @@ router.get("/", (req, res) => {
         });
 });
 
-// GET pdbs history
+// GET tablespaces history
 router.get("/history", (req, res) => {
     controller
         .list_history()
