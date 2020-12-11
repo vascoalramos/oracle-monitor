@@ -1,5 +1,5 @@
 module.exports = {
-    user: "orclmonitor",
-    password: "secret",
+    user: "aebd_test",
+    password: "password",
     connectString: "localhost:1521/orclpdb1.localdomain",
 };

@@ -32,7 +32,7 @@ module.exports.execute = async function (statement, binds = [], opts = {}) {
 
             const result = await conn.execute(statement, binds, opts);
 
-            resolve(result);
+            resolve(result.rows);
         } catch (err) {
             reject(err);
         } finally {

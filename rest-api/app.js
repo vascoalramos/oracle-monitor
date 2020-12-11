@@ -4,9 +4,9 @@ const logger = require("morgan");
 const cors = require("cors");
 
 const database = require("./resources/database");
+database.checkConnection();
 
-const patientsRouter = require("./routes/patients");
-const bedsRouter = require("./routes/beds");
+const pdbRouter = require("./routes/pdb");
 
 let app = express();
 
@@ -16,9 +16,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors());
 
-app.use("/api/patients", patientsRouter);
-app.use("/api/beds", bedsRouter);
-
-database.checkConnection();
+app.use("/api/pdbs", pdbRouter);
 
 module.exports = app;
