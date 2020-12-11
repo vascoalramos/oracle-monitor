@@ -1,4 +1,4 @@
-CREATE OR REPLACE VIEW cpu_history_per_minute AS
+CREATE OR REPLACE VIEW view_cpu_history_per_minute AS
     SELECT
         AVG(value) AS value,
         TO_CHAR(tstp, 'YYYY/MM/DD HH24:MI') AS tstp
@@ -7,7 +7,7 @@ CREATE OR REPLACE VIEW cpu_history_per_minute AS
     ORDER BY tstp DESC;
 
 
-CREATE OR REPLACE VIEW cpu_history_per_hour AS
+CREATE OR REPLACE VIEW view_cpu_history_per_hour AS
     SELECT
         AVG(value) AS value,
         TO_CHAR(tstp, 'YYYY/MM/DD HH24') AS tstp
@@ -16,7 +16,7 @@ CREATE OR REPLACE VIEW cpu_history_per_hour AS
     ORDER BY tstp DESC;
 
 
-CREATE OR REPLACE VIEW cpu_history_per_day AS
+CREATE OR REPLACE VIEW view_cpu_history_per_day AS
     SELECT
         AVG(value) AS value,
         TO_CHAR(tstp, 'YYYY/MM/DD') AS tstp
@@ -25,7 +25,7 @@ CREATE OR REPLACE VIEW cpu_history_per_day AS
     ORDER BY tstp DESC;
 
 
-CREATE OR REPLACE VIEW cpu_history_per_month AS
+CREATE OR REPLACE VIEW view_cpu_history_per_month AS
     SELECT
         AVG(value) AS value,
         TO_CHAR(tstp, 'YYYY/MM') AS tstp
@@ -34,7 +34,7 @@ CREATE OR REPLACE VIEW cpu_history_per_month AS
     ORDER BY tstp DESC;
 
 
-CREATE OR REPLACE VIEW cpu_history_per_year AS
+CREATE OR REPLACE VIEW view_cpu_history_per_year AS
     SELECT
         AVG(value) AS value,
         TO_CHAR(tstp, 'YYYY') AS tstp
