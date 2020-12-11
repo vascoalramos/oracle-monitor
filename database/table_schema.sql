@@ -1,26 +1,43 @@
-DROP MATERIALIZED VIEW mat_view_datafile;
 DROP MATERIALIZED VIEW mat_view_pdb;
-DROP MATERIALIZED VIEW mat_view_tablespace;
 
-DROP TABLE cpu_history CASCADE CONSTRAINTS;
-DROP TABLE datafile_history CASCADE CONSTRAINTS;
-DROP TABLE memory_history CASCADE CONSTRAINTS;
-DROP TABLE pdb_history CASCADE CONSTRAINTS;
-DROP TABLE session_history CASCADE CONSTRAINTS;
-DROP TABLE tablespace_history CASCADE CONSTRAINTS;
+DROP TABLE cpu_values CASCADE CONSTRAINTS;
+DROP TABLE datafile CASCADE CONSTRAINTS;
+DROP TABLE datafile_values CASCADE CONSTRAINTS;
+DROP TABLE memory_values CASCADE CONSTRAINTS;
+DROP TABLE pdb_values CASCADE CONSTRAINTS;
+DROP TABLE session_values CASCADE CONSTRAINTS;
+DROP TABLE tablespace CASCADE CONSTRAINTS;
+DROP TABLE tablespace_values CASCADE CONSTRAINTS;
 DROP TABLE users CASCADE CONSTRAINTS;
 
-
--- cpu_history
-CREATE TABLE cpu_history (
+-- cpu_values
+CREATE TABLE cpu_values (
     value  NUMBER NOT NULL,
     tstp   TIMESTAMP WITH LOCAL TIME ZONE DEFAULT systimestamp NOT NULL
 );
 
 
--- datafile_history
-CREATE TABLE datafile_history (
+-- datafile
+CREATE TABLE datafile (
     tablespace_name  VARCHAR2(30 BYTE) NOT NULL,
+    datafile_name    VARCHAR2(513 BYTE) NOT NULL
+);
+
+CREATE UNIQUE INDEX datafile_pk ON
+    datafile (
+        datafile_name
+    ASC )
+        TABLESPACE aebd_tables PCTFREE 10
+            STORAGE ( PCTINCREASE 0 MINEXTENTS 1 MAXEXTENTS UNLIMITED FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT )
+        LOGGING;
+
+ALTER TABLE datafile
+    ADD CONSTRAINT datafile_pk PRIMARY KEY ( datafile_name )
+        USING INDEX datafile_pk;
+
+
+-- datafile_values
+CREATE TABLE datafile_values (
     datafile_name    VARCHAR2(513 BYTE) NOT NULL,
     total            NUMBER NOT NULL,
     free             NUMBER NOT NULL,
@@ -30,44 +47,44 @@ CREATE TABLE datafile_history (
     tstp             TIMESTAMP WITH LOCAL TIME ZONE DEFAULT systimestamp NOT NULL
 );
 
-COMMENT ON COLUMN datafile_history.total IS
+COMMENT ON COLUMN datafile_values.total IS
     '(MB)';
 
-COMMENT ON COLUMN datafile_history.free IS
+COMMENT ON COLUMN datafile_values.free IS
     '(MB)';
 
-COMMENT ON COLUMN datafile_history.used IS
+COMMENT ON COLUMN datafile_values.used IS
     '(MB)';
 
 
--- memory_history
-CREATE TABLE memory_history (
+-- memory_values
+CREATE TABLE memory_values (
     total  NUMBER NOT NULL,
     used   NUMBER NOT NULL,
     tstp   TIMESTAMP WITH LOCAL TIME ZONE DEFAULT systimestamp NOT NULL
 );
 
-COMMENT ON COLUMN memory_history.total IS
+COMMENT ON COLUMN memory_values.total IS
     '(MB)';
 
-COMMENT ON COLUMN memory_history.used IS
+COMMENT ON COLUMN memory_values.used IS
     '(MB)';
 
 
--- pdb_history
-CREATE TABLE pdb_history (
+-- pdb_values
+CREATE TABLE pdb_values (
     name        VARCHAR2(128 BYTE) NOT NULL,
     con_id      NUMBER NOT NULL,
     total_size  NUMBER NOT NULL,
     tstp        TIMESTAMP WITH LOCAL TIME ZONE DEFAULT systimestamp NOT NULL
 );
 
-COMMENT ON COLUMN pdb_history.total_size IS
+COMMENT ON COLUMN pdb_values.total_size IS
     '(GB)';
 
 
--- session_history
-CREATE TABLE session_history (
+-- session_values
+CREATE TABLE session_values (
     sid       NUMBER NOT NULL,
     con_id    NUMBER NOT NULL,
     username  VARCHAR2(128 BYTE),
@@ -78,8 +95,26 @@ CREATE TABLE session_history (
 );
 
 
--- tablespace_history
-CREATE TABLE tablespace_history (
+-- tablespace
+CREATE TABLE tablespace (
+    name VARCHAR2(30 BYTE) NOT NULL
+);
+
+CREATE UNIQUE INDEX tablespace_pk ON
+    tablespace (
+        name
+    ASC )
+        TABLESPACE aebd_tables PCTFREE 10
+            STORAGE ( PCTINCREASE 0 MINEXTENTS 1 MAXEXTENTS UNLIMITED FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT )
+        LOGGING;
+
+ALTER TABLE tablespace
+    ADD CONSTRAINT tablespace_pk PRIMARY KEY ( name )
+        USING INDEX tablespace_pk;
+
+
+-- tablespace_values
+CREATE TABLE tablespace_values (
     name             VARCHAR2(30 BYTE) NOT NULL,
     total            NUMBER NOT NULL,
     free             NUMBER NOT NULL,
@@ -89,13 +124,13 @@ CREATE TABLE tablespace_history (
     tstp             TIMESTAMP WITH LOCAL TIME ZONE DEFAULT systimestamp NOT NULL
 );
 
-COMMENT ON COLUMN tablespace_history.total IS
+COMMENT ON COLUMN tablespace_values.total IS
     '(MB)';
 
-COMMENT ON COLUMN tablespace_history.free IS
+COMMENT ON COLUMN tablespace_values.free IS
     '(MB)';
 
-COMMENT ON COLUMN tablespace_history.used IS
+COMMENT ON COLUMN tablespace_values.used IS
     '(MB)';
 
 
@@ -110,23 +145,23 @@ CREATE TABLE users (
 );
 
 
--- mat_view_datafile
-CREATE MATERIALIZED VIEW mat_view_datafile (
-    tablespace_name,
-    datafile_name
-)
-    REFRESH
-        COMPLETE
-        ON COMMIT
-AS
-    SELECT
-        tablespace_name,
-        datafile_name
-    FROM
-        datafile_history
-    GROUP BY
-        tablespace_name,
-        datafile_name;
+-- constraints
+ALTER TABLE datafile
+    ADD CONSTRAINT datafile_fk1 FOREIGN KEY ( tablespace_name )
+        REFERENCES tablespace ( name )
+    NOT DEFERRABLE;
+
+ALTER TABLE datafile_values
+    ADD CONSTRAINT datafile_history_fk1 FOREIGN KEY ( datafile_name )
+        REFERENCES datafile ( datafile_name )
+            ON DELETE CASCADE
+    NOT DEFERRABLE;
+
+ALTER TABLE tablespace_values
+    ADD CONSTRAINT tablespace_history_fk1 FOREIGN KEY ( name )
+        REFERENCES tablespace ( name )
+            ON DELETE CASCADE
+    NOT DEFERRABLE;
 
 
 -- mat_view_pdb
@@ -142,23 +177,7 @@ AS
         name,
         con_id
     FROM
-        pdb_history
+        pdb_values
     GROUP BY
         name,
         con_id;
-
-
--- mat_view_tablespace
-CREATE MATERIALIZED VIEW mat_view_tablespace (
-    name
-)
-    REFRESH
-        COMPLETE
-        ON COMMIT
-AS
-    SELECT
-        name
-    FROM
-        tablespace_history
-    GROUP BY
-        name;
