@@ -59,76 +59,72 @@ cd rest-api
 npm run start
 ```
 
-
-
 ### Create PDB and users managment
-
 
 #### Create space for PDB
 
+Enter **root** mode with: `sudo su`
 
-Enter root mode with:
-```
-sudo su
- ```
+After entering root mode, run the folowing commands (if you're not able to enter root mode, add `sudo` before each command):
 
-After entering root mode run the folowing commands, if you're not able to enter root mode, input "sudo" before each command:
-```cd /home/uminho/dockers/data/oracle/
- cd u02/app/oracle/oradata/ORCL/
- mkdir monitor
- chown oracle:oinstall monitor/
- ```
- #### Create PDB
- 
- 
- Enter oracle shell:
- ```
- docker exec -it DOCKER_ID bash
- ```
-You can check the "DOCKER_ID" with the following command:
+```bash
+cd /home/uminho/dockers/data/oracle/
+cd u02/app/oracle/oradata/ORCL/
+mkdir monitor
+chown oracle:oinstall monitor/
 ```
-docker ps -a
- ```
-Remember to be in root mode, otherwise add "sudo" before each command.
+
+#### Create PDB
+
+Enter oracle shell: `docker exec -it <DOCKER_ID> bash`
+
+You can check the `DOCKER_ID` with the following command: `docker ps -a`
+
+Remember to be in **root** mode, otherwise add `sudo` before each command.
 
 After you enter the oracle shell, you have to connect to your cbd:
+
+```bash
+sqlplus sys/Oradoc_db1 as sysdba
 ```
-sqlplus sys/Oradoc_db1@localhost:1521/ORCLCDB.localdomain as sysdba
- ```
+
 Now that you have connected with your CBD, it's time to create the PDB:
-``` CREATE pluggable database monitor 
-        admin user aebd_admin IDENTIFIED BY aebd 
-        roles = (DBA) 
-        FILE_NAME_CONVERT=('/u02/app/oracle/oradata/ORCL/pdbseed','/u02/app/oracle/oradata/ORCL/monitor');
- ```
- 
- Before you can do anything with your new PDB, you need to turn it on and then connect to it:
- 
-``` ALTER pluggable database monitor open;
+
+```sql
+CREATE pluggable database monitor
+	admin user aebd_admin IDENTIFIED BY aebd
+    roles = (DBA)
+    FILE_NAME_CONVERT=('/u02/app/oracle/oradata/ORCL/pdbseed','/u02/app/oracle/oradata/ORCL/monitor');
+```
+
+Before you can do anything with your new PDB, you need to turn it on and then connect to it:
+
+```sql
+ALTER pluggable database monitor open;
 connect sys/Oradoc_db1@localhost:1521/monitor.localdomain AS sysdba
- ```
-  #### Create Tablespaces and Datafiles
+```
 
+#### Create Tablespaces and Datafiles
 
-``` CREATE tablespace monitor_data 
-	datafile '/u02/app/oracle/oradata/ORCL/permatablemonitor01.dbf' 
+```sql
+CREATE tablespace monitor_data
+	datafile '/u02/app/oracle/oradata/ORCL/permatablemonitor01.dbf'
 	SIZE 10M
 	AUTOEXTEND ON;
 
 CREATE temporary tablespace temp_monitor
-	tempfile '/u02/app/oracle/oradata/ORCL/aebd/temptablemonitor01.dbf' 
+	tempfile '/u02/app/oracle/oradata/ORCL/aebd/temptablemonitor01.dbf'
 	SIZE 10M
 	AUTOEXTEND ON;
- ```
- 
-  #### Create User and grant him previleges
- 
- 
-``` CREATE user orclmonitor IDENTIFIED BY secret;
+```
+
+#### Create User and grant him previleges
+
+```sql
+CREATE user orclmonitor IDENTIFIED BY secret;
 SELECT username, common, con_id  FROM cdb_users WHERE username ='ORCLMONITOR';
 GRANT CREATE MATERIALIZED VIEW, UNLIMITED TABLESPACE, CREATE SESSION, RESOURCE, ALTER ANY MATERIALIZED VIEW, DROP ANY MATERIALIZED VIEW, DROP ANY VIEW, CREATE ANY VIEW TO orclmonitor;
- ```
-
+```
 
 ## Authors
 
