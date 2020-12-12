@@ -39,8 +39,12 @@ python3 agent.py &
 ```
 
 ### How to kill process
+<<<<<<< HEAD
 
 When running agent.py it will return a pid. To kill the process, run `kill <pid>`.
+=======
+When running agent.py it will return a pid. ```kill pid``` will kill this process 
+>>>>>>> 31edcbda0f1d27d260158aaade9ad19217d1d719
 
 ### Rest API
 
