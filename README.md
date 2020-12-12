@@ -110,7 +110,7 @@ connect sys/Oradoc_db1@localhost:1521/monitor.localdomain AS sysdba
   #### Create Tablespaces and Datafiles
 
 
-``` CREATE tablespace monito_data 
+``` CREATE tablespace monitor_data 
 	datafile '/u02/app/oracle/oradata/ORCL/permatablemonitor01.dbf' 
 	SIZE 10M
 	AUTOEXTEND ON;
@@ -125,7 +125,7 @@ CREATE temporary tablespace temp_monitor
  
  
 ``` CREATE user orclmonitor IDENTIFIED BY secret;
-SELECT username, common, con_id  FROM cdb_users WHERE username ='ORCLmonitor';
+SELECT username, common, con_id  FROM cdb_users WHERE username ='ORCLMONITOR';
 GRANT CREATE MATERIALIZED VIEW, UNLIMITED TABLESPACE, CREATE SESSION, RESOURCE, ALTER ANY MATERIALIZED VIEW, DROP ANY MATERIALIZED VIEW, DROP ANY VIEW, CREATE ANY VIEW TO orclmonitor;
  ```
 
