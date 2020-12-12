@@ -93,7 +93,7 @@ Now that you have connected with your CBD, it's time to create the PDB:
 ```sql
 CREATE pluggable database monitor
 	admin user aebd_admin IDENTIFIED BY aebd
-    roles = (DBA)
+	roles = (DBA)
     FILE_NAME_CONVERT=('/u02/app/oracle/oradata/ORCL/pdbseed','/u02/app/oracle/oradata/ORCL/monitor');
 ```
 
@@ -126,8 +126,7 @@ SELECT username, common, con_id  FROM cdb_users WHERE username ='ORCLMONITOR';
 GRANT CREATE MATERIALIZED VIEW, UNLIMITED TABLESPACE, CREATE SESSION, RESOURCE, ALTER ANY MATERIALIZED VIEW, DROP ANY MATERIALIZED VIEW, DROP ANY VIEW, CREATE ANY VIEW TO orclmonitor;
 ```
 
-## Authors
-
+## Author
 -   **Carolina Marques:** [CarolinaRMarques](https://github.com/CarolinaRMarques)
 -   **Francisco Borges:** [AlbertinoDias](https://github.com/AlbertinoDias)
 -   **Rui Pereira:** [rpcbp](https://github.com/rpcbp)
