@@ -12,53 +12,6 @@
 
 ## Run Software
 
-### Scrapper Agent
-
-#### Prerequisites
-
-Install Oracle Instant Client: https://www.oracle.com/database/technologies/instant-client/linux-x86-64-downloads.html#ic_x64_inst
-
-```bash
-# install necessary software
-sudo apt-get install python3-venv
-pip3 install virtualenv
-
-# install env software (python)
-cd scrapper-agent
-python3 -m venv venv
-source venv/bin/activate
-pip3 install -r requirements.txt
-```
-
-#### How to run
-
-```bash
-cd scrapper-agent
-source venv/bin/activate
-python3 agent.py &
-```
-
-### How to kill process
-
-When running agent.py it will return a pid. To kill the process, run `kill <pid>`.
-
-### Rest API
-
-#### Prerequisites
-
-```bash
-# install dependencies
-cd rest-api
-npm install
-```
-
-#### How to run
-
-```bash
-cd rest-api
-npm run start
-```
-
 ### Create PDB and users managment
 
 #### Create space for PDB
@@ -126,7 +79,55 @@ SELECT username, common, con_id  FROM cdb_users WHERE username ='ORCLMONITOR';
 GRANT CREATE MATERIALIZED VIEW, UNLIMITED TABLESPACE, CREATE SESSION, RESOURCE, ALTER ANY MATERIALIZED VIEW, DROP ANY MATERIALIZED VIEW, DROP ANY VIEW, CREATE ANY VIEW TO orclmonitor;
 ```
 
+### Scrapper Agent
+
+#### Prerequisites
+
+Install Oracle Instant Client: https://www.oracle.com/database/technologies/instant-client/linux-x86-64-downloads.html#ic_x64_inst
+
+```bash
+# install necessary software
+sudo apt-get install python3-venv
+pip3 install virtualenv
+
+# install env software (python)
+cd scrapper-agent
+python3 -m venv venv
+source venv/bin/activate
+pip3 install -r requirements.txt
+```
+
+#### How to run
+
+```bash
+cd scrapper-agent
+source venv/bin/activate
+python3 agent.py &
+```
+
+### How to kill process
+
+When running agent.py it will return a pid. To kill the process, run `kill <pid>`.
+
+### Rest API
+
+#### Prerequisites
+
+```bash
+# install dependencies
+cd rest-api
+npm install
+```
+
+#### How to run
+
+```bash
+cd rest-api
+npm run start
+```
+
 ## Author
+
 -   **Carolina Marques:** [CarolinaRMarques](https://github.com/CarolinaRMarques)
 -   **Francisco Borges:** [AlbertinoDias](https://github.com/AlbertinoDias)
 -   **Rui Pereira:** [rpcbp](https://github.com/rpcbp)
