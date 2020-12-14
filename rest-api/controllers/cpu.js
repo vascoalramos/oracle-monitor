@@ -7,3 +7,11 @@ module.exports.list_history = () => {
                        FROM cpu_values
                        ORDER BY TSTP`);
 };
+
+module.exports.group_history = (time) => {
+    return db.execute(`SELECT
+                            VALUE as "value",
+                            TSTP as "tstp"
+                       FROM view_cpu_values_per_${time}
+                       ORDER BY TSTP`);
+};
