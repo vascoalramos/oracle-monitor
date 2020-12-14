@@ -30,23 +30,45 @@ router.get("/", (req, res) => {
 // GET datafiles history
 router.get("/history", (req, res) => {
     let final_data = {};
-    controller
-        .list()
-        .then((data) => {
-            final_data["entities"] = data;
-            controller
-                .list_history()
-                .then((data) => {
-                    final_data["history"] = data;
-                    res.status(200).jsonp(final_data);
-                })
-                .catch((error) => {
-                    res.status(500).jsonp(error);
-                });
-        })
-        .catch((error) => {
-            res.status(500).jsonp(error);
-        });
+
+    if ("tablespace" in req.query) {
+        let tablespace = req.query.tablespace;
+        controller
+            .filter(tablespace)
+            .then((data) => {
+                final_data["entities"] = data;
+                controller
+                    .filter_history(tablespace)
+                    .then((data) => {
+                        final_data["history"] = data;
+                        res.status(200).jsonp(final_data);
+                    })
+                    .catch((error) => {
+                        res.status(500).jsonp(error);
+                    });
+            })
+            .catch((error) => {
+                res.status(500).jsonp(error);
+            });
+    } else {
+        controller
+            .list()
+            .then((data) => {
+                final_data["entities"] = data;
+                controller
+                    .list_history()
+                    .then((data) => {
+                        final_data["history"] = data;
+                        res.status(200).jsonp(final_data);
+                    })
+                    .catch((error) => {
+                        res.status(500).jsonp(error);
+                    });
+            })
+            .catch((error) => {
+                res.status(500).jsonp(error);
+            });
+    }
 });
 
 module.exports = router;
