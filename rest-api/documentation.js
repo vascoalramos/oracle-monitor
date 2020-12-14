@@ -153,7 +153,29 @@ module.exports = {
                 },
             },
         },
-        "/sessions": {},
+        "/sessions/history": {
+            get: {
+                tags: ["Sessions"],
+                description: "Get Sessions",
+                operationId: "getSessions",
+                parameters: [],
+                responses: {
+                    200: {
+                        description: "Sessions data was obtained",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "array",
+                                    items: {
+                                        $ref: "#/components/schemas/Session",
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
         "/tablespaces": {},
         "/datafiles": {},
     },
@@ -165,7 +187,7 @@ module.exports = {
                     value: {
                         type: "number",
                         description: "CPU value in %",
-                        example: "24.1",
+                        example: 24.1,
                     },
                     tstp: {
                         type: "string",
@@ -180,12 +202,12 @@ module.exports = {
                     total: {
                         type: "number",
                         description: "Memory total value in MB",
-                        example: "1800",
+                        example: 1800,
                     },
                     used: {
                         type: "number",
                         description: "Memory used value in MB",
-                        example: "4576",
+                        example: 4576,
                     },
                     tstp: {
                         type: "string",
@@ -198,9 +220,9 @@ module.exports = {
                 type: "object",
                 properties: {
                     id: {
-                        type: "number",
+                        type: "integer",
                         description: "User ID",
-                        example: "1",
+                        example: 1,
                     },
                     name: {
                         type: "string",
@@ -240,7 +262,7 @@ module.exports = {
                     con_id: {
                         type: "interger",
                         description: "PDB connection id",
-                        example: "1",
+                        example: 1,
                     },
                 },
             },
@@ -255,12 +277,52 @@ module.exports = {
                     con_id: {
                         type: "interger",
                         description: "PDB connection id",
-                        example: "2",
+                        example: 2,
                     },
                     total: {
                         type: "number",
                         description: "Memory total value in GB",
-                        example: "3.4",
+                        example: 3.4,
+                    },
+                    tstp: {
+                        type: "string",
+                        description: "Timestamp",
+                        example: "2020-12-11T22:34:14.127Z",
+                    },
+                },
+            },
+            Session: {
+                type: "object",
+                properties: {
+                    id: {
+                        type: "interger",
+                        description: "Session ID",
+                        example: 1,
+                    },
+                    con_id: {
+                        type: "interger",
+                        description: "Session's PDB connection id",
+                        example: 2,
+                    },
+                    username: {
+                        type: "string",
+                        description: "Session's user name",
+                        example: "ORCLMONITOR",
+                    },
+                    status: {
+                        type: "string",
+                        description: "Session status",
+                        example: "ACTIVE",
+                    },
+                    program: {
+                        type: "string",
+                        description: "Session's program",
+                        example: "oracle@5027f6f36af6 (W004)",
+                    },
+                    type: {
+                        type: "string",
+                        description: "Session type",
+                        example: "BACKGROUND",
                     },
                     tstp: {
                         type: "string",
