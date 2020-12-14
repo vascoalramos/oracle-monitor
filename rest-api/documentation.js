@@ -271,7 +271,17 @@ module.exports = {
                 tags: ["Datafiles"],
                 description: "Get Datafiles history",
                 operationId: "getDatafilesHistory",
-                parameters: [],
+                parameters: [
+                    {
+                        name: "tablespace",
+                        in: "query",
+                        schema: {
+                            type: "string",
+                            example: "SYSTEM",
+                        },
+                        required: false,
+                    },
+                ],
                 responses: {
                     200: {
                         description: "Datafiles history was obtained",

@@ -27,3 +27,20 @@ module.exports.list_history = () => {
          ORDER BY TSTP`,
     );
 };
+
+module.exports.filter_history = (tablespace_name) => {
+    return db.execute(
+        `SELECT
+            TABLESPACE_NAME as "tablespace_name",
+            DATAFILE_NAME as "datafile_name",
+            TOTAL as "total",
+            FREE as "free",
+            USED as "used",
+            PERCENTAGE_FREE as "percentage_free",
+            PERCENTAGE_USED as "percentage_used",
+            TSTP as "tstp"
+         FROM datafile_values
+         WHERE TABLESPACE_NAME='${tablespace_name}'
+         ORDER BY TSTP`,
+    );
+};
