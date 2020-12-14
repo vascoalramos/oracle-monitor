@@ -51,12 +51,12 @@ connect sys/Oradoc_db1@localhost:1521/monitor.localdomain AS sysdba
 
 ```sql
 CREATE tablespace monitor_data
-	datafile '/u02/app/oracle/oradata/ORCL/permatablemonitor01.dbf'
+	tempfile '/u02/app/oracle/oradata/ORCL/monitor/permatablemonitor.dbf' 
 	SIZE 10M
 	AUTOEXTEND ON;
 
 CREATE temporary tablespace temp_monitor
-	tempfile '/u02/app/oracle/oradata/ORCL/aebd/temptablemonitor01.dbf'
+	tempfile '/u02/app/oracle/oradata/ORCL/monitor/temptablemonitor.dbf' 
 	SIZE 10M
 	AUTOEXTEND ON;
 ```
