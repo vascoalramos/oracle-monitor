@@ -32,7 +32,18 @@ module.exports = {
                 tags: ["CPU"],
                 description: "Get CPU history",
                 operationId: "getCpuHistory",
-                parameters: [],
+                parameters: [
+                    {
+                        name: "groupBy",
+                        in: "query",
+                        schema: {
+                            type: "string",
+                            enum: ["minute", "hour", "day", "month", "year"],
+                            default: "minute",
+                        },
+                        required: false,
+                    },
+                ],
                 responses: {
                     200: {
                         description: "CPU history was obtained",
@@ -135,7 +146,18 @@ module.exports = {
                 tags: ["PDBs"],
                 description: "Get PDBs history",
                 operationId: "getPDBsHistory",
-                parameters: [],
+                parameters: [
+                    {
+                        name: "groupBy",
+                        in: "query",
+                        schema: {
+                            type: "string",
+                            enum: ["minute", "hour", "day", "month", "year"],
+                            default: "minute",
+                        },
+                        required: false,
+                    },
+                ],
                 responses: {
                     200: {
                         description: "PDBs history was obtained",
@@ -215,7 +237,18 @@ module.exports = {
                 tags: ["Tablespaces"],
                 description: "Get Tablespaces history",
                 operationId: "getTablespacesHistory",
-                parameters: [],
+                parameters: [
+                    {
+                        name: "groupBy",
+                        in: "query",
+                        schema: {
+                            type: "string",
+                            enum: ["minute", "hour", "day", "month", "year"],
+                            default: "minute",
+                        },
+                        required: false,
+                    },
+                ],
                 responses: {
                     200: {
                         description: "Tablespaces history was obtained",
@@ -282,7 +315,27 @@ module.exports = {
                 tags: ["Datafiles"],
                 description: "Get Datafiles history",
                 operationId: "getDatafilesHistory",
-                parameters: [],
+                parameters: [
+                    {
+                        name: "tablespace",
+                        in: "query",
+                        schema: {
+                            type: "string",
+                            example: "SYSTEM",
+                        },
+                        required: false,
+                    },
+                    {
+                        name: "groupBy",
+                        in: "query",
+                        schema: {
+                            type: "string",
+                            enum: ["minute", "hour", "day", "month", "year"],
+                            default: "minute",
+                        },
+                        required: false,
+                    },
+                ],
                 responses: {
                     200: {
                         description: "Datafiles history was obtained",
