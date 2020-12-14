@@ -401,9 +401,9 @@ module.exports = {
                         description: "PDB connection id",
                         example: 2,
                     },
-                    total: {
+                    size: {
                         type: "number",
-                        description: "Memory total value in GB",
+                        description: "PDB total size value in GB",
                         example: 3.4,
                     },
                     tstp: {
