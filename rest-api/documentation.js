@@ -176,8 +176,130 @@ module.exports = {
                 },
             },
         },
-        "/tablespaces": {},
-        "/datafiles": {},
+        "/tablespaces": {
+            get: {
+                tags: ["Tablespaces"],
+                description: "Get Tablespaces",
+                operationId: "getTablespaces",
+                parameters: [],
+                responses: {
+                    200: {
+                        description: "Tablespaces data was obtained",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "array",
+                                    items: {
+                                        $ref: "#/components/schemas/Tablespace",
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/tablespaces/history": {
+            get: {
+                tags: ["Tablespaces"],
+                description: "Get Tablespaces history",
+                operationId: "getTablespacesHistory",
+                parameters: [],
+                responses: {
+                    200: {
+                        description: "Tablespaces history was obtained",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        entities: {
+                                            type: "array",
+                                            items: {
+                                                $ref: "#/components/schemas/Tablespace",
+                                            },
+                                        },
+                                        history: {
+                                            type: "array",
+                                            items: {
+                                                $ref: "#/components/schemas/TablespaceValue",
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/datafiles": {
+            get: {
+                tags: ["Datafiles"],
+                description: "Get Datafiles",
+                operationId: "getDatafiles",
+                parameters: [
+                    {
+                        name: "tablespace",
+                        in: "query",
+                        schema: {
+                            type: "string",
+                            example: "SYSTEM",
+                        },
+                        required: false,
+                    },
+                ],
+                responses: {
+                    200: {
+                        description: "Datafiles data was obtained",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "array",
+                                    items: {
+                                        $ref: "#/components/schemas/Datafile",
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/datafiles/history": {
+            get: {
+                tags: ["Datafiles"],
+                description: "Get Datafiles history",
+                operationId: "getDatafilesHistory",
+                parameters: [],
+                responses: {
+                    200: {
+                        description: "Datafiles history was obtained",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        entities: {
+                                            type: "array",
+                                            items: {
+                                                $ref: "#/components/schemas/Datafile",
+                                            },
+                                        },
+                                        history: {
+                                            type: "array",
+                                            items: {
+                                                $ref: "#/components/schemas/DatafileValue",
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
     },
     components: {
         schemas: {
@@ -323,6 +445,116 @@ module.exports = {
                         type: "string",
                         description: "Session type",
                         example: "BACKGROUND",
+                    },
+                    tstp: {
+                        type: "string",
+                        description: "Timestamp",
+                        example: "2020-12-11T22:34:14.127Z",
+                    },
+                },
+            },
+            Tablespace: {
+                type: "object",
+                properties: {
+                    name: {
+                        type: "string",
+                        description: "Tablespace name",
+                        example: "SYSTEM",
+                    },
+                },
+            },
+            TablespaceValue: {
+                type: "object",
+                properties: {
+                    name: {
+                        type: "string",
+                        description: "Tablespace name",
+                        example: "SYSTEM",
+                    },
+                    total: {
+                        type: "number",
+                        description: "Tablespace total size (MB)",
+                        example: 610,
+                    },
+                    free: {
+                        type: "number",
+                        description: "Tablespace free size (MB)",
+                        example: 36,
+                    },
+                    used: {
+                        type: "number",
+                        description: "Tablespace used size (MB)",
+                        example: 574,
+                    },
+                    percentage_free: {
+                        type: "number",
+                        description: "Tablespace percentage of free space (%)",
+                        example: 6,
+                    },
+                    percentage_used: {
+                        type: "number",
+                        description: "Tablespace percentage of used space (%)",
+                        example: 94,
+                    },
+                    tstp: {
+                        type: "string",
+                        description: "Timestamp",
+                        example: "2020-12-11T22:34:14.127Z",
+                    },
+                },
+            },
+            Datafile: {
+                type: "object",
+                properties: {
+                    tablespace_name: {
+                        type: "string",
+                        description: "Tablespace name",
+                        example: "SYSTEM",
+                    },
+                    datafile_name: {
+                        type: "string",
+                        description: "Datafile name",
+                        example: "/u02/app/oracle/oradata/ORCLCDB/orclpdb1/system01.dbf",
+                    },
+                },
+            },
+            DatafileValue: {
+                type: "object",
+                properties: {
+                    tablespace_name: {
+                        type: "string",
+                        description: "Tablespace name",
+                        example: "SYSTEM",
+                    },
+                    datafile_name: {
+                        type: "string",
+                        description: "Datafile name",
+                        example: "/u02/app/oracle/oradata/ORCLCDB/orclpdb1/system01.dbf",
+                    },
+                    total: {
+                        type: "number",
+                        description: "Datafile total size (MB)",
+                        example: 290,
+                    },
+                    free: {
+                        type: "number",
+                        description: "Datafile free size (MB)",
+                        example: 9,
+                    },
+                    used: {
+                        type: "number",
+                        description: "Datafile used size (MB)",
+                        example: 281,
+                    },
+                    percentage_free: {
+                        type: "number",
+                        description: "Datafile percentage of free space (%)",
+                        example: 97,
+                    },
+                    percentage_used: {
+                        type: "number",
+                        description: "Datafile percentage of used space (%)",
+                        example: 3,
                     },
                     tstp: {
                         type: "string",
