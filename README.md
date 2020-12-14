@@ -1,15 +1,5 @@
 # Oracle Monitor
 
-## DB Entities
-
--   pdb_history (name, con_id, total_size, tstp)
--   users (user_id, username, account_status, default_tablespace, temporary_tablespace, last_login)
--   session_history (sid, con_id, username, status, program, type, tstp)
--   cpu_history (value (%), tstp)
--   memory_history (total, used, tstp)
--   tablespace_history (name, total, free, used, percentage_free, percentage_used, tstp)
--   datafile_history (tablespace_name, datafile_name, total, free, used, percentage_free, percentage_used, tstp)
-
 ## Run Software
 
 ### Create PDB and users managment
@@ -125,6 +115,8 @@ npm install
 cd rest-api
 npm run start
 ```
+
+**Note:** To access Rest API documentation, go to: http://localhost:3000/api
 
 ## Author
 

@@ -5,7 +5,11 @@ module.exports.list = () => {
 };
 
 module.exports.list_history = () => {
-    return db.execute(
-        'SELECT NAME as "name", CON_ID as "con_id", TOTAL_SIZE as "size", TSTP as "tstp" FROM pdb_values',
-    );
+    return db.execute(`SELECT
+                            NAME as "name",
+                            CON_ID as "con_id",
+                            TOTAL_SIZE as "size",
+                            TSTP as "tstp"
+                       FROM pdb_values
+                       ORDER BY TSTP`);
 };
