@@ -23,6 +23,7 @@ module.exports.list_history = () => {
             PERCENTAGE_FREE as "percentage_free",
             PERCENTAGE_USED as "percentage_used",
             TSTP as "tstp"
-         FROM datafile_values`,
+         FROM datafile_values
+         ORDER BY TSTP`,
     );
 };
