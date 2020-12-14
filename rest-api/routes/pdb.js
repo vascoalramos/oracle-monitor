@@ -29,7 +29,8 @@ router.get("/history", (req, res) => {
                     controller
                         .group_history(groupBy)
                         .then((data) => {
-                            res.status(200).jsonp(data);
+                            final_data["history"] = data;
+                            res.status(200).jsonp(final_data);
                         })
                         .catch((error) => {
                             res.status(500).jsonp(error);
@@ -41,7 +42,8 @@ router.get("/history", (req, res) => {
                 controller
                     .list_history()
                     .then((data) => {
-                        res.status(200).jsonp(data);
+                        final_data["history"] = data;
+                        res.status(200).jsonp(final_data);
                     })
                     .catch((error) => {
                         res.status(500).jsonp(error);
