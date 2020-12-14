@@ -8,7 +8,7 @@ let router = express.Router();
 router.get("/", (req, res) => {
     if ("tablespace" in req.query) {
         controller
-            .filter_history(req.query.tablespace)
+            .filter(req.query.tablespace)
             .then((data) => {
                 res.status(200).jsonp(data);
             })

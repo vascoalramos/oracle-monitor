@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors());
 
+// endpoints
 const pdbRouter = require("./routes/pdb");
 const memoryRouter = require("./routes/memory");
 const userRouter = require("./routes/user");
@@ -29,5 +30,10 @@ app.use("/api/cpu", cpuRouter);
 app.use("/api/sessions", sessionRouter);
 app.use("/api/tablespaces", tablespaceRouter);
 app.use("/api/datafiles", datafileRouter);
+
+// documentation
+const swaggerUi = require("swagger-ui-express");
+const documentation = require("./documentation");
+app.use("/api", swaggerUi.serve, swaggerUi.setup(documentation));
 
 module.exports = app;
