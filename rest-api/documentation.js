@@ -100,7 +100,7 @@ module.exports = {
             get: {
                 tags: ["PDBs"],
                 description: "Get PDBs",
-                operationId: "getPDbs",
+                operationId: "getPDBs",
                 parameters: [],
                 responses: {
                     200: {
@@ -111,6 +111,40 @@ module.exports = {
                                     type: "array",
                                     items: {
                                         $ref: "#/components/schemas/PDB",
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/pdbs/history": {
+            get: {
+                tags: ["PDBs"],
+                description: "Get PDBs history",
+                operationId: "getPDBsHistory",
+                parameters: [],
+                responses: {
+                    200: {
+                        description: "PDBs history was obtained",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        entities: {
+                                            type: "array",
+                                            items: {
+                                                $ref: "#/components/schemas/PDB",
+                                            },
+                                        },
+                                        history: {
+                                            type: "array",
+                                            items: {
+                                                $ref: "#/components/schemas/PDBValue",
+                                            },
+                                        },
                                     },
                                 },
                             },
@@ -207,6 +241,31 @@ module.exports = {
                         type: "interger",
                         description: "PDB connection id",
                         example: "1",
+                    },
+                },
+            },
+            PDBValue: {
+                type: "object",
+                properties: {
+                    name: {
+                        type: "string",
+                        description: "PDB name",
+                        example: "ORCLPDB1",
+                    },
+                    con_id: {
+                        type: "interger",
+                        description: "PDB connection id",
+                        example: "2",
+                    },
+                    total: {
+                        type: "number",
+                        description: "Memory total value in GB",
+                        example: "3.4",
+                    },
+                    tstp: {
+                        type: "string",
+                        description: "Timestamp",
+                        example: "2020-12-11T22:34:14.127Z",
                     },
                 },
             },
