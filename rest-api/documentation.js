@@ -39,7 +39,10 @@ module.exports = {
                         content: {
                             "application/json": {
                                 schema: {
-                                    $ref: "#/components/schemas/CpuValues",
+                                    type: "array",
+                                    items: {
+                                        $ref: "#/components/schemas/CPU",
+                                    },
                                 },
                             },
                         },
@@ -59,7 +62,10 @@ module.exports = {
                         content: {
                             "application/json": {
                                 schema: {
-                                    $ref: "#/components/schemas/MemoryValues",
+                                    type: "array",
+                                    items: {
+                                        $ref: "#/components/schemas/Memory",
+                                    },
                                 },
                             },
                         },
@@ -67,15 +73,59 @@ module.exports = {
                 },
             },
         },
-        "/users": {},
-        "/pdbs": {},
+        "/users": {
+            get: {
+                tags: ["Users"],
+                description: "Get Users",
+                operationId: "getUsers",
+                parameters: [],
+                responses: {
+                    200: {
+                        description: "Users data was obtained",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "array",
+                                    items: {
+                                        $ref: "#/components/schemas/User",
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/pdbs": {
+            get: {
+                tags: ["PDBs"],
+                description: "Get PDBs",
+                operationId: "getPDbs",
+                parameters: [],
+                responses: {
+                    200: {
+                        description: "PDBs data was obtained",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "array",
+                                    items: {
+                                        $ref: "#/components/schemas/PDB",
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
         "/sessions": {},
         "/tablespaces": {},
         "/datafiles": {},
     },
     components: {
         schemas: {
-            CpuValue: {
+            CPU: {
                 type: "object",
                 properties: {
                     value: {
@@ -90,13 +140,7 @@ module.exports = {
                     },
                 },
             },
-            CpuValues: {
-                type: "array",
-                items: {
-                    $ref: "#/components/schemas/CpuValue",
-                },
-            },
-            MemoryValue: {
+            Memory: {
                 type: "object",
                 properties: {
                     total: {
@@ -116,10 +160,54 @@ module.exports = {
                     },
                 },
             },
-            MemoryValues: {
-                type: "array",
-                items: {
-                    $ref: "#/components/schemas/MemoryValue",
+            User: {
+                type: "object",
+                properties: {
+                    id: {
+                        type: "number",
+                        description: "User ID",
+                        example: "1",
+                    },
+                    name: {
+                        type: "string",
+                        description: "Username",
+                        example: "ORCLMONITOR",
+                    },
+                    status: {
+                        type: "string",
+                        description: "User account status",
+                        example: "OPEN",
+                    },
+                    default_tablespace: {
+                        type: "string",
+                        description: "User default tablespace",
+                        example: "SYSTEM",
+                    },
+                    temp_tablespace: {
+                        type: "string",
+                        description: "User temporary tablespace",
+                        example: "TEMP",
+                    },
+                    last_login: {
+                        type: "string",
+                        description: "User last login",
+                        example: "2020-12-11T22:37:31.000Z",
+                    },
+                },
+            },
+            PDB: {
+                type: "object",
+                properties: {
+                    name: {
+                        type: "string",
+                        description: "PDB name",
+                        example: "PDB$SEED",
+                    },
+                    con_id: {
+                        type: "interger",
+                        description: "PDB connection id",
+                        example: "1",
+                    },
                 },
             },
         },
