@@ -55,7 +55,18 @@ module.exports = {
                 tags: ["Memory"],
                 description: "Get Memory history",
                 operationId: "getMemoryHistory",
-                parameters: [],
+                parameters: [
+                    {
+                        name: "groupBy",
+                        in: "query",
+                        schema: {
+                            type: "string",
+                            enum: ["minute", "hour", "day", "month", "year"],
+                            default: "minute",
+                        },
+                        required: false,
+                    },
+                ],
                 responses: {
                     200: {
                         description: "Memory history was obtained",
