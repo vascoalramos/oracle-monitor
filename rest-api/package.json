@@ -1,10 +1,10 @@
 {
-    "name": "aidauci-rest-api",
-    "version": "1.0.0",
-    "description": "AIDA UCI Rest API",
+    "name": "oracle-monitor-rest-api",
+    "version": "1.1.0",
+    "description": "Oracle Monitor Rest API",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/vascoalramos/aidauci.git"
+        "url": "git+https://github.com/vascoalramos/oracle-monitor.git"
     },
     "keywords": [
         "Javascript",
@@ -14,9 +14,9 @@
     "author": "Vasco Ramos",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/vascoalramos/aidauci/issues"
+        "url": "https://github.com/vascoalramos/oracle-monitor/issues"
     },
-    "homepage": "https://github.com/vascoalramos/aidauci/blob/main/README.md",
+    "homepage": "https://github.com/vascoalramos/oracle-monitor/blob/main/README.md",
     "main": "bin/www",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
