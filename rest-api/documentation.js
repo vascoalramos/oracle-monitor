@@ -370,6 +370,11 @@ module.exports = {
             CPU: {
                 type: "object",
                 properties: {
+                    username: {
+                        type: "string",
+                        description: "DB user name",
+                        example: "SYSTEM",
+                    },
                     value: {
                         type: "number",
                         description: "CPU value in %",
