@@ -1,5 +1,5 @@
 module.exports = {
-    user: "orclmonitor",
+    user: "orcl_monitor",
     password: "secret",
-    connectString: "localhost:1521/monitor.localdomain",
+    connectString: "localhost:1521/orclmonitor.localdomain",
 };

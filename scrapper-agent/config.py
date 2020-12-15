@@ -9,6 +9,6 @@ username = "system"
 password = "Oradoc_db1"
 dsn = "localhost/orclpdb1.localdomain"
 
-username2 = "orclmonitor"
+username2 = "orcl_monitor"
 password2 = "secret"
-dsn2 = "localhost/monitor.localdomain"
+dsn2 = "localhost/orclmonitor.localdomain"
