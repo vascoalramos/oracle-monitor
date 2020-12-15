@@ -2,7 +2,7 @@ pdb_sql = "select name, con_id, round(total_size / (1024*1024*1024), 2) as total
 
 sessions_sql = "select sid, con_id, username, status, program, type, CURRENT_TIMESTAMP from V$SESSION"
 
-cpu_sql = """select username, sum(cpu_usage_per_cent) as usage from 
+cpu_sql = """select username, sum(cpu_usage_per_cent) as usage, CURRENT_TIMESTAMP from 
 (
 select * from
     (

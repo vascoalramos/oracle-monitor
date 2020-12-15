@@ -220,6 +220,7 @@ def insert_datafiles_values(rows):
             cursor.executemany(sql, rows)
             connection.commit()
 
+
 def cpu_query():
     with cx_Oracle.connect(
         config.username,
@@ -231,21 +232,20 @@ def cpu_query():
             cursor.execute(cpu_sql)
             while True:
                 rows = cursor.fetchmany(batch_size)
-                print(rows)
                 if not rows:
                     break
                 insert_cpu_entries(rows)
 
 
 def insert_cpu_entries(rows):
-    sql = "insert into cpu_values(username,value, tstp) values(:username, :usage, :tstp)"
+    sql = (
+        "insert into cpu_values(username,value, tstp) values(:username, :usage, :tstp)"
+    )
     with cx_Oracle.connect(
         config.username2, config.password2, config.dsn2, encoding=config.encoding
     ) as connection:
         with connection.cursor() as cursor:
-            cursor.setinputsizes(
-                None, None, cx_Oracle.TIMESTAMP
-            )
+            cursor.setinputsizes(None, None, cx_Oracle.TIMESTAMP)
             cursor.executemany(sql, rows)
             connection.commit()
 
