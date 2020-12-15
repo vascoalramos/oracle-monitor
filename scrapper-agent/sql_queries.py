@@ -2,6 +2,33 @@ pdb_sql = "select name, con_id, round(total_size / (1024*1024*1024), 2) as total
 
 sessions_sql = "select sid, con_id, username, status, program, type, CURRENT_TIMESTAMP from V$SESSION"
 
+cpu_sql = """select username, sum(cpu_usage_per_cent) as usage from 
+(
+select * from
+    (
+    select username,sid,
+           round((cpu_usage/(
+                            select sum(value) total_cpu_usage
+                              from v$sesstat t
+                             inner join v$session  s on ( t.sid = s.sid )
+                             inner join v$statname n on ( t.statistic# = n.statistic# )
+                             where n.name like '%CPU used by this session%'
+                               and nvl(s.sql_exec_start, s.prev_exec_start) >= sysdate-1/24
+                            ))*100,2) cpu_usage_per_cent,
+           module_info,client_info 
+      from
+        (
+        select nvl(s.username,'Oracle Internal Proc.') username,s.sid,t.value cpu_usage, nvl(s.module, s.program) module_info, decode(s.osuser,'oracle', s.client_info, s.osuser) client_info
+          from v$sesstat t
+               inner join v$session  s on ( t.sid = s.sid )
+               inner join v$statname n on ( t.statistic# = n.statistic# )
+         where n.name like '%CPU used by this session%'
+           and nvl(s.sql_exec_start, s.prev_exec_start) >= sysdate-1/24
+        ) s1
+    )
+)
+group by username"""
+
 memory_sql = """select T as total, U as used, CURRENT_TIMESTAMP
     from dual
     inner join (

@@ -13,6 +13,7 @@ DROP TABLE users CASCADE CONSTRAINTS;
 
 -- cpu_values
 CREATE TABLE cpu_values (
+    username  VARCHAR2(128 BYTE),
     value  NUMBER NOT NULL,
     tstp   TIMESTAMP WITH LOCAL TIME ZONE DEFAULT systimestamp NOT NULL
 );

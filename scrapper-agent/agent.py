@@ -7,6 +7,7 @@ from sql_queries import (
     tablespaces_sql,
     datafiles_sql,
     users_sql,
+    cpu_sql,
 )
 
 batch_size = 20
@@ -219,6 +220,35 @@ def insert_datafiles_values(rows):
             cursor.executemany(sql, rows)
             connection.commit()
 
+def cpu_query():
+    with cx_Oracle.connect(
+        config.username,
+        config.password,
+        config.dsn,
+        encoding=config.encoding,
+    ) as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(cpu_sql)
+            while True:
+                rows = cursor.fetchmany(batch_size)
+                print(rows)
+                if not rows:
+                    break
+                insert_cpu_entries(rows)
+
+
+def insert_cpu_entries(rows):
+    sql = "insert into cpu_values(username,value, tstp) values(:username, :usage, :tstp)"
+    with cx_Oracle.connect(
+        config.username2, config.password2, config.dsn2, encoding=config.encoding
+    ) as connection:
+        with connection.cursor() as cursor:
+            cursor.setinputsizes(
+                None, None, cx_Oracle.TIMESTAMP
+            )
+            cursor.executemany(sql, rows)
+            connection.commit()
+
 
 def run_agent():
     try:
@@ -228,6 +258,7 @@ def run_agent():
         users_query()
         tablespaces_query()
         datafiles_query()
+        cpu_query()
     except cx_Oracle.Error as error:
         print("Error occurred: " + error)
 
