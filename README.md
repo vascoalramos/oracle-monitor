@@ -13,8 +13,8 @@ After entering root mode, run the folowing commands (if you're not able to enter
 ```bash
 cd /home/uminho/dockers/data/oracle/
 cd u02/app/oracle/oradata/ORCL/
-mkdir monitor
-chown oracle:oinstall monitor/
+mkdir orclmonitor
+chown oracle:oinstall orclmonitor/
 ```
 
 #### Create PDB
@@ -34,39 +34,33 @@ sqlplus sys/Oradoc_db1 as sysdba
 Now that you have connected with your CBD, it's time to create the PDB:
 
 ```sql
-CREATE pluggable database monitor
+CREATE pluggable database orclmonitor
 	admin user aebd_admin IDENTIFIED BY aebd
 	roles = (DBA)
-    FILE_NAME_CONVERT=('/u02/app/oracle/oradata/ORCL/pdbseed','/u02/app/oracle/oradata/ORCL/monitor');
+    FILE_NAME_CONVERT=('/u02/app/oracle/oradata/ORCL/pdbseed','/u02/app/oracle/oradata/ORCL/orclmonitor');
 ```
 
 Before you can do anything with your new PDB, you need to turn it on and then connect to it:
 
 ```sql
-ALTER pluggable database monitor open;
-connect sys/Oradoc_db1@localhost:1521/monitor.localdomain AS sysdba
+ALTER pluggable database orclmonitor open;
+connect sys/Oradoc_db1@localhost:1521/orclmonitor.localdomain AS sysdba
 ```
 
 #### Create Tablespaces and Datafiles
 
 ```sql
-CREATE tablespace monitor_data
-	datafile '/u02/app/oracle/oradata/ORCL/permatablemonitor01.dbf'
-	SIZE 10M
-	AUTOEXTEND ON;
+CREATE tablespace orclmonitor_data datafile '/u02/app/oracle/oradata/ORCL/orclmonitor/permmonitor01.dbf' SIZE 10M AUTOEXTEND ON;
 
-CREATE temporary tablespace temp_monitor
-	tempfile '/u02/app/oracle/oradata/ORCL/aebd/temptablemonitor01.dbf'
-	SIZE 10M
-	AUTOEXTEND ON;
+CREATE temporary tablespace orclmonitor_temp tempfile '/u02/app/oracle/oradata/ORCL/orclmonitor/tempmonitor01.dbf' SIZE 10M AUTOEXTEND ON;
 ```
 
 #### Create User and grant him previleges
 
 ```sql
-CREATE user orclmonitor IDENTIFIED BY secret;
-SELECT username, common, con_id  FROM cdb_users WHERE username ='ORCLMONITOR';
-GRANT CREATE MATERIALIZED VIEW, UNLIMITED TABLESPACE, CREATE SESSION, RESOURCE, ALTER ANY MATERIALIZED VIEW, DROP ANY MATERIALIZED VIEW, DROP ANY VIEW, CREATE ANY VIEW TO orclmonitor;
+CREATE user orcl_monitor IDENTIFIED BY secret;
+SELECT username, common, con_id  FROM cdb_users WHERE username ='ORCL_MONITOR';
+GRANT CREATE MATERIALIZED VIEW, UNLIMITED TABLESPACE, CREATE SESSION, RESOURCE, ALTER ANY MATERIALIZED VIEW, DROP ANY MATERIALIZED VIEW, DROP ANY VIEW, CREATE ANY VIEW TO orcl_monitor;
 ```
 
 ### Scrapper Agent
