@@ -1,4 +1,3 @@
-port = 1512
 encoding = "UTF-8"
 
 username_root = "sys"
@@ -12,4 +11,3 @@ dsn = "localhost/orclpdb1.localdomain"
 username2 = "orcl_monitor"
 password2 = "secret"
 dsn2 = "localhost/orclmonitor.localdomain"
-
