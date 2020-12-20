@@ -12,3 +12,12 @@ module.exports.list_history = () => {
                        FROM session_values
                        ORDER BY TSTP`);
 };
+
+module.exports.group_history_count = (time) => {
+    return db.execute(`SELECT
+                            TOTAL as "total",
+                            USED as "used",
+                            TSTP as "tstp"
+                       FROM view_session_values_per_${time}
+                       ORDER BY TSTP`);
+};
