@@ -209,6 +209,40 @@ module.exports = {
                 },
             },
         },
+        "/sessions/total/history": {
+            get: {
+                tags: ["Sessions"],
+                description: "Get Sessions Total",
+                operationId: "getSessionsTotal",
+                parameters: [
+                    {
+                        name: "groupBy",
+                        in: "query",
+                        schema: {
+                            type: "string",
+                            enum: ["minute", "hour", "day", "month", "year"],
+                            default: "minute",
+                        },
+                        required: false,
+                    },
+                ],
+                responses: {
+                    200: {
+                        description: "Sessions data was obtained",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "array",
+                                    items: {
+                                        $ref: "#/components/schemas/SessionTotal",
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
         "/tablespaces": {
             get: {
                 tags: ["Tablespaces"],
@@ -514,6 +548,21 @@ module.exports = {
                         type: "string",
                         description: "Session type",
                         example: "BACKGROUND",
+                    },
+                    tstp: {
+                        type: "string",
+                        description: "Timestamp",
+                        example: "2020-12-11T22:34:14.127Z",
+                    },
+                },
+            },
+            SessionTotal: {
+                type: "object",
+                properties: {
+                    total: {
+                        type: "string",
+                        description: "Session type",
+                        example: 2.3,
                     },
                     tstp: {
                         type: "string",
