@@ -13,10 +13,17 @@ module.exports.list_history = () => {
                        ORDER BY TSTP`);
 };
 
+module.exports.list_history_count = () => {
+    return db.execute(`SELECT
+                            TOTAL as "total",
+                            TSTP as "tstp"
+                       FROM view_session_values_per_second
+                       ORDER BY TSTP`);
+};
+
 module.exports.group_history_count = (time) => {
     return db.execute(`SELECT
                             TOTAL as "total",
-                            USED as "used",
                             TSTP as "tstp"
                        FROM view_session_values_per_${time}
                        ORDER BY TSTP`);
