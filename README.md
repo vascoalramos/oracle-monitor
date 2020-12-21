@@ -61,6 +61,7 @@ CREATE temporary tablespace orclmonitor_temp tempfile '/u02/app/oracle/oradata/O
 CREATE user orcl_monitor IDENTIFIED BY secret;
 SELECT username, common, con_id  FROM cdb_users WHERE username ='ORCL_MONITOR';
 GRANT CREATE MATERIALIZED VIEW, UNLIMITED TABLESPACE, CREATE SESSION, RESOURCE, ALTER ANY MATERIALIZED VIEW, DROP ANY MATERIALIZED VIEW, DROP ANY VIEW, CREATE ANY VIEW TO orcl_monitor;
+GRANT SELECT ANY DICTIONARY TO orcl_monitor;
 ```
 
 ### Scrapper Agent
