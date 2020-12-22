@@ -18,8 +18,8 @@ const backgroundColor = [
 const url = "http://localhost:3000/api/";
 
 function fetchPDB() {
-    document.getElementById("myPDBChart").innerHTML = ""
-    fetch(url + "pdbs/history?groupBy=hour", fetchParams)
+    document.getElementById("myPDBChart").innerHTML = "";
+    fetch(url + "pdbs/history?groupBy=minute", fetchParams)
         .then((res) => {
             if (!res.ok) {
                 throw new Error(res.statusText);
@@ -27,7 +27,6 @@ function fetchPDB() {
             return res.json();
         })
         .then((data) => {
-
             var ctx = document.getElementById("myPDBChart");
 
             let history = data.history;
@@ -71,7 +70,7 @@ function fetchPDB() {
 }
 
 function fetchCPU() {
-    document.getElementById("myCPUPie").innerHTML = ""
+    document.getElementById("myCPUPie").innerHTML = "";
     fetch(url + "cpu/history", fetchParams)
         .then((res) => {
             if (!res.ok) {
@@ -84,7 +83,7 @@ function fetchCPU() {
 
             let cpuMap = new Map();
 
-            data.forEach(function(character) {
+            data.forEach(function (character) {
                 cpuMap.set(`${character.username}`, `${character.value}`);
             });
 
@@ -93,20 +92,22 @@ function fetchCPU() {
                 data: {
                     labels: Array.from(cpuMap.keys()),
 
-                    datasets: [{
-                        data: Array.from(cpuMap.values()),
-                        backgroundColor: [
-                            "#0074D9",
-                            "#FF4136",
-                            "#2ECC40",
-                            "#FF851B",
-                            "#3e95cd",
-                            "#8e5ea2",
-                            "#3cba9f",
-                            "#e8c3b9",
-                            "#c45850",
-                        ],
-                    }, ],
+                    datasets: [
+                        {
+                            data: Array.from(cpuMap.values()),
+                            backgroundColor: [
+                                "#0074D9",
+                                "#FF4136",
+                                "#2ECC40",
+                                "#FF851B",
+                                "#3e95cd",
+                                "#8e5ea2",
+                                "#3cba9f",
+                                "#e8c3b9",
+                                "#c45850",
+                            ],
+                        },
+                    ],
                 },
                 options: {
                     legend: {
@@ -129,7 +130,7 @@ function fetchCPU() {
 }
 
 function fetchMemory() {
-    document.getElementById("myMemoryPie").innerHTML = ""
+    document.getElementById("myMemoryPie").innerHTML = "";
     fetch(url + "memory/history", fetchParams)
         .then((res) => {
             if (!res.ok) {
@@ -140,17 +141,19 @@ function fetchMemory() {
         .then((data) => {
             var ctx = document.getElementById("myMemoryPie");
             let characterData = [];
-            data.forEach(function(character) {
+            data.forEach(function (character) {
                 characterData.push([parseInt(character.total), parseInt(character.used)]);
             });
             var myPieChart = new Chart(ctx, {
                 type: "pie",
                 data: {
                     labels: ["Total", "Used"],
-                    datasets: [{
-                        data: characterData[characterData.length - 1],
-                        backgroundColor: ["#0074D9", "#FF4136"],
-                    }, ],
+                    datasets: [
+                        {
+                            data: characterData[characterData.length - 1],
+                            backgroundColor: ["#0074D9", "#FF4136"],
+                        },
+                    ],
                 },
                 options: {
                     responsive: true,
@@ -174,7 +177,7 @@ function fetchMemory() {
 }
 
 function getUsers() {
-    document.getElementById("output").innerHTML = ""
+    document.getElementById("output").innerHTML = "";
 
     fetch(url + "users", fetchParams)
         .then((res) => {
@@ -187,7 +190,7 @@ function getUsers() {
             let count = 0;
             let output = "";
 
-            data.forEach(function(user) {
+            data.forEach(function (user) {
                 count++;
                 output +=
                     `
@@ -220,7 +223,7 @@ function getUsers() {
 }
 
 function getTableSpaces() {
-    document.getElementById("output").innerHTML = ""
+    document.getElementById("output").innerHTML = "";
 
     fetch(url + "tablespaces/history", fetchParams)
         .then((res) => {
@@ -233,10 +236,10 @@ function getTableSpaces() {
             let count = 0;
             let output = "";
             let tablespaceMap = new Map();
-            data["entities"].forEach(function(names) {
+            data["entities"].forEach(function (names) {
                 tablespaceMap.set(`${names.name}`, []);
             });
-            data["history"].forEach(function(tablespaces) {
+            data["history"].forEach(function (tablespaces) {
                 if (tablespaceMap.has(`${tablespaces.name}`)) {
                     tablespaceMap.set(`${tablespaces.name}`, [
                         `${tablespaces.name}`,
@@ -276,7 +279,7 @@ function getTableSpaces() {
 }
 
 function getDatafiles() {
-    document.getElementById("output").innerHTML = ""
+    document.getElementById("output").innerHTML = "";
 
     fetch(url + "datafiles/history", fetchParams)
         .then((res) => {
@@ -289,10 +292,10 @@ function getDatafiles() {
             let count = 0;
             let output = "";
             let datafilesMap = new Map();
-            data["entities"].forEach(function(names) {
+            data["entities"].forEach(function (names) {
                 datafilesMap.set(`${names.datafile_name}`, []);
             });
-            data["history"].forEach(function(datafiles) {
+            data["history"].forEach(function (datafiles) {
                 // console.log([`${datafiles.tablespace_name}`, `${datafiles.datafile_name}`])
                 if (datafilesMap.has(`${datafiles.datafile_name}`)) {
                     datafilesMap.set(`${datafiles.datafile_name}`, [
