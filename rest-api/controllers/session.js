@@ -14,17 +14,27 @@ module.exports.list_history = () => {
 };
 
 module.exports.list_history_count = () => {
-    return db.execute(`SELECT
-                            TOTAL as "total",
-                            TSTP as "tstp"
-                       FROM view_session_values_per_second
-                       ORDER BY TSTP`);
+    return db.execute(`SELECT *
+                       FROM (
+                             SELECT
+                                TOTAL as "total",
+                                TSTP as "tstp"
+                             FROM view_session_values_per_second
+                             ORDER BY TSTP DESC
+                            ) temp
+                       WHERE rownum <= 30
+                       ORDER BY rownum DESC`);
 };
 
 module.exports.group_history_count = (time) => {
-    return db.execute(`SELECT
-                            TOTAL as "total",
-                            TSTP as "tstp"
-                       FROM view_session_values_per_${time}
-                       ORDER BY TSTP`);
+    return db.execute(`SELECT *
+                       FROM (
+                             SELECT
+                                TOTAL as "total",
+                                TSTP as "tstp"
+                             FROM view_session_values_per_${time}
+                             ORDER BY TSTP DESC
+                            ) temp
+                       WHERE rownum <= 30
+                       ORDER BY rownum DESC`);
 };
