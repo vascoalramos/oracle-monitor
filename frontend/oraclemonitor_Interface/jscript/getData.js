@@ -1,292 +1,358 @@
 const fetchParams = {
     method: "GET",
     mode: "cors",
-    cache: "default"
+    cache: "default",
 };
 
 const url = "http://localhost:3000/api/";
 
 function fetchPDB() {
-    fetch(url + 'pdbs/history', fetchParams)
-        .then(res => {
+    fetch(url + "pdbs/history?groupBy=minute", fetchParams)
+        .then((res) => {
             if (!res.ok) {
                 throw new Error(res.statusText);
             }
             return res.json();
         })
-        .then(data => {
+        .then((data) => {
             var ctx = document.getElementById("myPDBChart");
-            let pdbMap = new Map();
 
-            data['history'].forEach(function(character) {
+            let history = data.history;
 
-                pdbMap.set(`${character.name}`, `${character.size}`);
+            let labels = data.entities.map((e) => e.name);
+
+            let datasets = {};
+
+            let label_history;
+
+            labels.forEach((label) => {
+                label_history = history.filter((e) => e.name === label);
+                datasets[label] = label_history.map((e) => e.size);
             });
 
+            console.log(datasets);
 
-            console.log(pdbMap)
+            /*
+            console.log(pdbMap);
             var myChart = new Chart(ctx, {
-                type: 'line',
+                type: "line",
                 data: {
                     labels: Array.from(pdbMap.keys()),
-                    datasets: [{
-                        data: Array.from(pdbMap.values()),
-                        lineTension: 0,
-                        backgroundColor: 'transparent',
-                        borderColor: '#007bff',
-                        borderWidth: 4,
-                        pointBackgroundColor: '#007bff'
-                    }]
+                    datasets: [
+                        {
+                            data: Array.from(pdbMap.values()),
+                            lineTension: 0,
+                            backgroundColor: "transparent",
+                            borderColor: "#007bff",
+                            borderWidth: 4,
+                            pointBackgroundColor: "#007bff",
+                        },
+                    ],
                 },
                 options: {
                     responsive: true,
                     title: {
                         display: true,
-                        text: 'PDB'
+                        text: "PDB",
                     },
                     tooltips: {
-                        mode: 'index',
+                        mode: "index",
                         intersect: false,
                     },
                     hover: {
-                        mode: 'nearest',
-                        intersect: true
+                        mode: "nearest",
+                        intersect: true,
                     },
                     scales: {
-                        xAxes: [{
-                            display: true,
-                            scaleLabel: {
+                        xAxes: [
+                            {
                                 display: true,
-                                labelString: 'Month'
-                            }
-                        }],
-                        yAxes: [{
-                            display: true,
-                            scaleLabel: {
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: "Month",
+                                },
+                            },
+                        ],
+                        yAxes: [
+                            {
                                 display: true,
-                                labelString: 'Value'
-                            }
-                        }]
-                    }
-                }
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: "Value",
+                                },
+                            },
+                        ],
+                    },
+                },
             });
+            */
         })
-        .catch(err => {
+        .catch((err) => {
             console.log("Error Getting Data From API");
         });
 }
 
 function fetchCPU() {
-    fetch(url + 'cpu/history', fetchParams)
-        .then(res => {
+    fetch(url + "cpu/history", fetchParams)
+        .then((res) => {
             if (!res.ok) {
                 throw new Error(res.statusText);
             }
             return res.json();
         })
-        .then(data => {
+        .then((data) => {
             var ctx = document.getElementById("myCPUPie");
 
             let cpuMap = new Map();
 
-            data.forEach(function(character) {
+            data.forEach(function (character) {
                 cpuMap.set(`${character.username}`, `${character.value}`);
             });
 
             var myChart = new Chart(ctx, {
-                type: 'bar',
+                type: "bar",
                 data: {
                     labels: Array.from(cpuMap.keys()),
 
-                    datasets: [{
-                        data: Array.from(cpuMap.values()),
-                        backgroundColor: [
-                            "#0074D9", "#FF4136", "#2ECC40", "#FF851B", "#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"
-                        ],
-
-                    }],
+                    datasets: [
+                        {
+                            data: Array.from(cpuMap.values()),
+                            backgroundColor: [
+                                "#0074D9",
+                                "#FF4136",
+                                "#2ECC40",
+                                "#FF851B",
+                                "#3e95cd",
+                                "#8e5ea2",
+                                "#3cba9f",
+                                "#e8c3b9",
+                                "#c45850",
+                            ],
+                        },
+                    ],
                 },
                 options: {
                     legend: {
-                        display: false
+                        display: false,
                     },
                     title: {
                         display: true,
-                        text: 'CPU Usage'
+                        text: "CPU Usage",
                     },
                     animation: {
                         animateScale: true,
-                        animateRotate: true
+                        animateRotate: true,
                     },
-                }
+                },
             });
         })
-        .catch(err => {
+        .catch((err) => {
             console.log("Error Getting Data From API");
         });
 }
 
 function fetchMemory() {
-    fetch(url + 'memory/history', fetchParams)
-        .then(res => {
+    fetch(url + "memory/history", fetchParams)
+        .then((res) => {
             if (!res.ok) {
                 throw new Error(res.statusText);
             }
             return res.json();
         })
-        .then(data => {
+        .then((data) => {
             var ctx = document.getElementById("myMemoryPie");
             let characterData = [];
-            data.forEach(function(character) {
+            data.forEach(function (character) {
                 characterData.push([parseInt(character.total), parseInt(character.used)]);
             });
             var myPieChart = new Chart(ctx, {
-                type: 'pie',
+                type: "pie",
                 data: {
                     labels: ["Total", "Used"],
-                    datasets: [{
-                        data: characterData[characterData.length - 1],
-                        backgroundColor: ["#0074D9", "#FF4136"],
-                    }]
+                    datasets: [
+                        {
+                            data: characterData[characterData.length - 1],
+                            backgroundColor: ["#0074D9", "#FF4136"],
+                        },
+                    ],
                 },
                 options: {
                     responsive: true,
                     legend: {
-                        position: 'top',
+                        position: "top",
                     },
                     title: {
                         display: true,
-                        text: 'Memory Usage'
+                        text: "Memory Usage",
                     },
                     animation: {
                         animateScale: true,
-                        animateRotate: true
-                    }
-                }
+                        animateRotate: true,
+                    },
+                },
             });
         })
-        .catch(err => {
+        .catch((err) => {
             console.log("Error Getting Data From API");
         });
 }
 
 function getUsers() {
-    fetch(url + 'users', fetchParams)
-        .then(res => {
+    fetch(url + "users", fetchParams)
+        .then((res) => {
             if (!res.ok) {
                 throw new Error(res.statusText);
             }
             return res.json();
         })
-        .then(data => {
+        .then((data) => {
             let count = 0;
-            let output = '';
+            let output = "";
 
-            data.forEach(function(user) {
+            data.forEach(function (user) {
                 count++;
-                output += `
+                output +=
+                    `
                 <tr>
-                <td id="name_` + count + `">${user.name}</td>
-                <td id="status_` + count + `">${user.status} </td>
-                <td id="def_tablespace_` + count + `"> ${user.default_tablespace}</td>
-                <td id="temp_tablespace_` + count + `">${user.temp_tablespace}</td>
-                <td id="last_login_` + count + `"> ${user.last_login}</td>
+                <td id="name_` +
+                    count +
+                    `">${user.name}</td>
+                <td id="status_` +
+                    count +
+                    `">${user.status} </td>
+                <td id="def_tablespace_` +
+                    count +
+                    `"> ${user.default_tablespace}</td>
+                <td id="temp_tablespace_` +
+                    count +
+                    `">${user.temp_tablespace}</td>
+                <td id="last_login_` +
+                    count +
+                    `"> ${user.last_login}</td>
               </tr>            
              <!-- End -->
                          `;
-
             });
 
-            document.getElementById('output').innerHTML = output;
+            document.getElementById("output").innerHTML = output;
         })
-        .catch(err => {
+        .catch((err) => {
             console.log("Error Getting Data From API");
         });
 }
 
-
 function getTableSpaces() {
-    fetch(url + 'tablespaces/history', fetchParams)
-        .then(res => {
+    fetch(url + "tablespaces/history", fetchParams)
+        .then((res) => {
             if (!res.ok) {
                 throw new Error(res.statusText);
             }
             return res.json();
         })
-        .then(data => {
+        .then((data) => {
             let count = 0;
-            let output = '';
+            let output = "";
             let tablespaceMap = new Map();
-            data['entities'].forEach(function(names) {
+            data["entities"].forEach(function (names) {
                 tablespaceMap.set(`${names.name}`, []);
-
             });
-            data['history'].forEach(function(tablespaces) {
+            data["history"].forEach(function (tablespaces) {
                 if (tablespaceMap.has(`${tablespaces.name}`)) {
-                    tablespaceMap.set(`${tablespaces.name}`, [`${tablespaces.name}`, `${tablespaces.total}`, `${tablespaces.free}`, `${tablespaces.used}`]);
+                    tablespaceMap.set(`${tablespaces.name}`, [
+                        `${tablespaces.name}`,
+                        `${tablespaces.total}`,
+                        `${tablespaces.free}`,
+                        `${tablespaces.used}`,
+                    ]);
                 }
             });
             for (const [key, value] of tablespaceMap.entries()) {
                 count++;
-                output += `
+                output +=
+                    `
                 <tr>
-                    <td id="name_` + count + `">${value[0]}</td>
-                    <td id="total_` + count + `">${value[1]}</td>
-                    <td id="free_` + count + `">${value[2]}</td>
-                    <td id="used_` + count + `">${value[3]}</td>
+                    <td id="name_` +
+                    count +
+                    `">${value[0]}</td>
+                    <td id="total_` +
+                    count +
+                    `">${value[1]}</td>
+                    <td id="free_` +
+                    count +
+                    `">${value[2]}</td>
+                    <td id="used_` +
+                    count +
+                    `">${value[3]}</td>
                 </tr>       
           
                      `;
             }
 
-            document.getElementById('output').innerHTML = output;
+            document.getElementById("output").innerHTML = output;
         })
-        .catch(err => {
+        .catch((err) => {
             console.log("Error Getting Data From API");
         });
 }
 
 function getDatafiles() {
-    fetch(url + 'datafiles/history', fetchParams)
-        .then(res => {
+    fetch(url + "datafiles/history", fetchParams)
+        .then((res) => {
             if (!res.ok) {
                 throw new Error(res.statusText);
             }
             return res.json();
         })
-        .then(data => {
+        .then((data) => {
             let count = 0;
-            let output = '';
+            let output = "";
             let datafilesMap = new Map();
-            data['entities'].forEach(function(names) {
+            data["entities"].forEach(function (names) {
                 datafilesMap.set(`${names.datafile_name}`, []);
             });
-            data['history'].forEach(function(datafiles) {
+            data["history"].forEach(function (datafiles) {
                 // console.log([`${datafiles.tablespace_name}`, `${datafiles.datafile_name}`])
                 if (datafilesMap.has(`${datafiles.datafile_name}`)) {
-                    datafilesMap.set(`${datafiles.datafile_name}`, [`${datafiles.tablespace_name}`, `${datafiles.datafile_name}`, `${datafiles.total}`, `${datafiles.free}`, `${datafiles.used}`]);
+                    datafilesMap.set(`${datafiles.datafile_name}`, [
+                        `${datafiles.tablespace_name}`,
+                        `${datafiles.datafile_name}`,
+                        `${datafiles.total}`,
+                        `${datafiles.free}`,
+                        `${datafiles.used}`,
+                    ]);
                 }
             });
-            console.log(tablespaceMap)
+            console.log(tablespaceMap);
 
             for (const [key, value] of datafilesMap.entries()) {
                 count++;
-                output += `
+                output +=
+                    `
                 <tr>
-                    <td id="name_` + count + `">${value[0]}</td>
-                    <td id="total_` + count + `">${value[1]}</td>
-                    <td id="free_` + count + `">${value[2]}</td>
-                    <td id="used_` + count + `">${value[3]}</td>
-                    <td id="used_` + count + `">${value[4]}</td>
+                    <td id="name_` +
+                    count +
+                    `">${value[0]}</td>
+                    <td id="total_` +
+                    count +
+                    `">${value[1]}</td>
+                    <td id="free_` +
+                    count +
+                    `">${value[2]}</td>
+                    <td id="used_` +
+                    count +
+                    `">${value[3]}</td>
+                    <td id="used_` +
+                    count +
+                    `">${value[4]}</td>
 
                 </tr>       
           
                      `;
             }
 
-            document.getElementById('output').innerHTML = output;
+            document.getElementById("output").innerHTML = output;
         })
-        .catch(err => {
+        .catch((err) => {
             console.log("Error Getting Data From API");
         });
 }
