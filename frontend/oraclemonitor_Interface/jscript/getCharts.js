@@ -31,7 +31,6 @@ function getMemoryPie() {
 }
 
 function getPDBChart() {
-    console.log('running');
     var ctx = document.getElementById("myChart");
     var myChart = new Chart(ctx, {
         type: 'line',
