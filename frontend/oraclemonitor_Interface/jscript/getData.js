@@ -21,13 +21,16 @@ function fetchPDB() {
 
             let labels = data.entities.map((e) => e.name);
 
-            let datasets = {};
+            let datasets = [];
 
             let label_history;
 
             labels.forEach((label) => {
                 label_history = history.filter((e) => e.name === label);
-                datasets[label] = label_history.map((e) => e.size);
+                datasets.push({
+                    label: label,
+                    data: label_history.map((e) => e.size),
+                });
             });
 
             console.log(datasets);
