@@ -15,7 +15,7 @@ module.exports.list_history = () => {
                              FROM pdb_values
                              ORDER BY TSTP DESC
                             )
-                        WHERE rownum <= (select count(distinct name) from pdb_values) * 30
+                       WHERE rownum <= (select count(distinct name) from pdb_values) * 30
                        ORDER BY rownum DESC`);
 };
 
@@ -30,6 +30,6 @@ module.exports.group_history = (time) => {
                              FROM view_pdb_values_per_${time}
                              ORDER BY TSTP DESC
                             )
-                        WHERE rownum <= (select count(distinct name) from view_pdb_values_per_${time}) * 30
+                       WHERE rownum <= (select count(distinct name) from view_pdb_values_per_${time}) * 30
                        ORDER BY rownum DESC`);
 };
