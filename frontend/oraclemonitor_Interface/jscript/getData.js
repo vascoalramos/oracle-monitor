@@ -25,69 +25,32 @@ function fetchPDB() {
 
             let label_history;
 
-            labels.forEach((label) => {
+            let graph_labels;
+
+            labels.forEach((label, idx) => {
                 label_history = history.filter((e) => e.name === label);
-                datasets[label] = label_history.map((e) => e.size);
+                datasets.push({
+                    label: label,
+                    data: label_history.map((e) => e.size),
+                    backgroundColor: "transparent",
+                });
+                if (idx === labels.length - 1) {
+                    graph_labels = label_history.map((e) => e.tstp);
+                }
             });
 
             console.log(datasets);
 
-            /*
-            console.log(pdbMap);
             var myChart = new Chart(ctx, {
                 type: "line",
                 data: {
-                    labels: Array.from(pdbMap.keys()),
-                    datasets: [
-                        {
-                            data: Array.from(pdbMap.values()),
-                            lineTension: 0,
-                            backgroundColor: "transparent",
-                            borderColor: "#007bff",
-                            borderWidth: 4,
-                            pointBackgroundColor: "#007bff",
-                        },
-                    ],
-                },
-                options: {
-                    responsive: true,
-                    title: {
-                        display: true,
-                        text: "PDB",
-                    },
-                    tooltips: {
-                        mode: "index",
-                        intersect: false,
-                    },
-                    hover: {
-                        mode: "nearest",
-                        intersect: true,
-                    },
-                    scales: {
-                        xAxes: [
-                            {
-                                display: true,
-                                scaleLabel: {
-                                    display: true,
-                                    labelString: "Month",
-                                },
-                            },
-                        ],
-                        yAxes: [
-                            {
-                                display: true,
-                                scaleLabel: {
-                                    display: true,
-                                    labelString: "Value",
-                                },
-                            },
-                        ],
-                    },
+                    labels: graph_labels,
+                    datasets: datasets,
                 },
             });
-            */
         })
         .catch((err) => {
+            console.log(err);
             console.log("Error Getting Data From API");
         });
 }
