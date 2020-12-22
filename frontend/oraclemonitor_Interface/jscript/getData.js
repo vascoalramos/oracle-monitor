@@ -27,10 +27,7 @@ function fetchPDB() {
 
             labels.forEach((label) => {
                 label_history = history.filter((e) => e.name === label);
-                datasets.push({
-                    label: label,
-                    data: label_history.map((e) => e.size),
-                });
+                datasets[label] = label_history.map((e) => e.size);
             });
 
             console.log(datasets);
