@@ -12,8 +12,17 @@ const backgroundColor = [
     "#8e5ea2",
     "#3cba9f",
     "#e8c3b9",
-    "#c45850",
+    "#ff4000",
+    "#00ffff",
+    "#ff00ff",
+    "#998F8F",
+    "#E89513",
+    "#9F25CF",
+    "#c45850", ,
+    "#1B6DF1",
+    "#F01BF1",
 ];
+
 let datafileChart = null;
 let tablespaceChart = null;
 let pdbChart = null;
@@ -76,12 +85,20 @@ function fetchTablespaceHistory(argument) {
                 },
                 options: {
                     responsive: false,
+                    scales: {
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Size Used (MB)'
+                            }
+                        }]
+                    },
                     legend: {
                         display: false,
                     },
                     title: {
                         display: true,
-                        text: "Tablespaces Used",
+                        text: "Tablespaces- Size Used (MB)",
                     },
                     animation: {
                         animateScale: true,
@@ -141,13 +158,21 @@ function fetchDatafileHistory(argument) {
                     datasets: datasets,
                 },
                 options: {
+                    scales: {
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Size Used (MB)'
+                            }
+                        }]
+                    },
                     responsive: false,
                     legend: {
                         display: false,
                     },
                     title: {
                         display: true,
-                        text: "Datafiles",
+                        text: "Datafiles- Size Used (MB)",
                     },
                     animation: {
                         animateScale: true,
@@ -207,13 +232,21 @@ function fetchPDB(argument) {
                     datasets: datasets,
                 },
                 options: {
+                    scales: {
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Value of Size (GB)'
+                            }
+                        }]
+                    },
                     responsive: false,
                     legend: {
                         display: false,
                     },
                     title: {
                         display: true,
-                        text: "PDBs",
+                        text: "PDBs Size",
                     },
                     animation: {
                         animateScale: true,
@@ -264,13 +297,21 @@ function getSessions(argument) {
                     }]
                 },
                 options: {
+                    scales: {
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Number of Sessions'
+                            }
+                        }]
+                    },
                     responsive: false,
                     legend: {
                         display: false,
                     },
                     title: {
                         display: true,
-                        text: "Sessions",
+                        text: "Total of Sessions Over Time",
                     },
 
                 },
@@ -312,13 +353,14 @@ function fetchCPU(argument) {
                     }, ],
                 },
                 options: {
+
                     responsive: false,
                     legend: {
                         display: false,
                     },
                     title: {
                         display: true,
-                        text: "CPU Usage",
+                        text: "CPU Usage (%)",
                     },
                     animation: {
                         animateScale: true,
@@ -332,50 +374,6 @@ function fetchCPU(argument) {
         });
 }
 
-/*function fetchMemory() {
-    document.getElementById("myMemoryPie").innerHTML = ""
-    fetch(url + "memory/history", fetchParams)
-        .then((res) => {
-            if (!res.ok) {
-                throw new Error(res.statusText);
-            }
-            return res.json();
-        })
-        .then((data) => {
-            var ctx = document.getElementById("myMemoryPie");
-            let characterData = [];
-            data.forEach(function(character) {
-                characterData.push([parseInt(character.total), parseInt(character.used)]);
-            });
-            var myPieChart = new Chart(ctx, {
-                type: "pie",
-                data: {
-                    labels: ["Total", "Used"],
-                    datasets: [{
-                        data: characterData[characterData.length - 1],
-                        backgroundColor: ["#0074D9", "#FF4136"],
-                    }, ],
-                },
-                options: {
-                    responsive: true,
-                    legend: {
-                        position: "top",
-                    },
-                    title: {
-                        display: true,
-                        text: "Memory Usage",
-                    },
-                    animation: {
-                        animateScale: true,
-                        animateRotate: true,
-                    },
-                },
-            });
-        })
-        .catch((err) => {
-            console.log("Error Getting Data From API");
-        });
-}*/
 
 function fetchMemory(argument) {
     clearChart(memoryChart);
@@ -424,9 +422,17 @@ function fetchMemory(argument) {
                     }],
                 },
                 options: {
+                    scales: {
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Value (MB)'
+                            }
+                        }]
+                    },
                     title: {
                         display: true,
-                        text: "Memory Usage",
+                        text: "Memory Usage (MB)",
                     },
                     responsive: false
                 }
@@ -606,3 +612,48 @@ function getDatafiles(argument) {
             console.log("Error Getting Data From API");
         });
 }
+
+/*function fetchMemory() {
+    document.getElementById("myMemoryPie").innerHTML = ""
+    fetch(url + "memory/history", fetchParams)
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error(res.statusText);
+            }
+            return res.json();
+        })
+        .then((data) => {
+            var ctx = document.getElementById("myMemoryPie");
+            let characterData = [];
+            data.forEach(function(character) {
+                characterData.push([parseInt(character.total), parseInt(character.used)]);
+            });
+            var myPieChart = new Chart(ctx, {
+                type: "pie",
+                data: {
+                    labels: ["Total", "Used"],
+                    datasets: [{
+                        data: characterData[characterData.length - 1],
+                        backgroundColor: ["#0074D9", "#FF4136"],
+                    }, ],
+                },
+                options: {
+                    responsive: true,
+                    legend: {
+                        position: "top",
+                    },
+                    title: {
+                        display: true,
+                        text: "Memory Usage",
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true,
+                    },
+                },
+            });
+        })
+        .catch((err) => {
+            console.log("Error Getting Data From API");
+        });
+}*/

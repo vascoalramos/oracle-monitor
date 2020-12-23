@@ -65,7 +65,7 @@
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                     <h1 class="h2">Dashboard</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
-                        <button type="button" class="btn btn-sm btn-outline-secondary" id="forceRefresh" onClick="start()">Force Refresh</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" id="forceRefresh" onClick="start(localStorage.getItem('time'))">Force Refresh</button>
 
                         <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span data-feather="calendar"></span>
@@ -138,9 +138,12 @@
             getTableSpaces(arg);
         }
 
-        window.onload = setInterval(
-            start(localStorage.getItem('time')),
-            10000);
+        window.onload = function() {
+            start(localStorage.getItem('time'))
+            setInterval(() => {
+                start(localStorage.getItem('time'))
+            }, 30000);
+        }
     </script>
 
 </body>
