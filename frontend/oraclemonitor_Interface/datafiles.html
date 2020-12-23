@@ -15,7 +15,6 @@
     <!-- Custom styles for this template -->
 
     <link href="css/index.css" rel="stylesheet">
-    <script src="jscript/getCharts.js"></script>
     <script src="jscript/getData.js"></script>
 
 
@@ -63,16 +62,19 @@
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                     <h1 class="h2">Dashboard</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
-                        <button type="button" class="btn btn-sm btn-outline-secondary" id="forceRefresh" onClick="window.location.reload();">Force Refresh</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" id="forceRefresh" onClick="start();">Force Refresh</button>
 
                         <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span data-feather="calendar"></span>
-                                This week
-                            </button>
+                            <span data-feather="calendar"></span>
+                            Choose Time
+                        </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
+                            <button class="dropdown-item" type="button" id="byMinute" onClick="start('minute')">By Minute</button>
+                            <button class="dropdown-item" type="button" id="byHour" onClick="start('hour')">By Hour</button>
+                            <button class="dropdown-item" type="button" id="byHour" onClick="start('day')">By Day</button>
+                            <button class="dropdown-item" type="button" id="byHour" onClick="start('month')">By Month</button>
+                            <button class="dropdown-item" type="button" id="byHour" onClick="start('year')">By Year</button>
+
                         </div>
                     </div>
                 </div>
@@ -99,11 +101,8 @@
                         </div>
                     </div>
                 </div>
+            </main>
         </div>
-
-
-        </main>
-    </div>
     </div>
     <footer class="footer mt-auto py-3">
         <div class="container">
@@ -129,13 +128,13 @@
     <!-- Graphs -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
     <script type="text/javascript">
-        function start() {
-            getPDBChart();
-            getDatafiles();
+        function start(arg) {
+            fetchDatafileHistory(arg);
+            getDatafiles(arg);
         }
-        document.onload = start();
-        setInterval(getPDBChart(), 10000);
+        window.onload = start('minute');
     </script>
+
 
 </body>
 
