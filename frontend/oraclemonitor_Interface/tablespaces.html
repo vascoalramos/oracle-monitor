@@ -137,7 +137,10 @@
             fetchTablespaceHistory(arg);
             getTableSpaces(arg);
         }
-        document.onload = start(localStorage.getItem('time'));
+
+        window.onload = setInterval(
+            start(localStorage.getItem('time')),
+            10000);
     </script>
 
 </body>

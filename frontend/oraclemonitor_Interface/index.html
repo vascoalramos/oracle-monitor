@@ -149,7 +149,9 @@
             getSessions(arg);
             getUsers();
         };
-        document.onload = start(localStorage.getItem('time'));
+        window.onload = setInterval(
+            start(localStorage.getItem('time')),
+            10000);
     </script>
 
 

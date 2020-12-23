@@ -135,7 +135,14 @@
             fetchDatafileHistory(arg);
             getDatafiles(arg);
         }
-        window.onload = start(localStorage.getItem('time'));
+
+        function imrun() {
+            console.log('here');
+            setInterval(
+                start(localStorage.getItem('time')),
+                1000);
+        }
+        window.onload = imrun();
     </script>
 
 
