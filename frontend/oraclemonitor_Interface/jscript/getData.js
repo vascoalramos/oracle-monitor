@@ -253,8 +253,8 @@ function fetchMemory() {
             });
 
             vals.forEach(function(v) {
-                total.set(v[2], v[1]);
-                used.set(v[2], v[0]);
+                total.set(v[2], v[0]);
+                used.set(v[2], v[1]);
             })
 
 
