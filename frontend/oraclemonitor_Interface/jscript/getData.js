@@ -14,12 +14,151 @@ const backgroundColor = [
     "#e8c3b9",
     "#c45850",
 ];
+const datafileChart = null;
+
+function clearChart(objChart) {
+    if (objChart != null) {
+        objChart.destroy();
+    }
+}
 
 const url = "http://localhost:3000/api/";
 
-function fetchPDB() {
+function fetchTablespaceHistory(argument) {
+    document.getElementById("myChart").innerHTML = ""
+    fetch(url + "tablespaces/history?groupBy=" + argument, fetchParams)
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error(res.statusText);
+            }
+            return res.json();
+        })
+        .then((data) => {
+
+            var ctx = document.getElementById("myChart");
+
+            let history = data.history;
+
+            let labels = data.entities.map((e) => e.name);
+
+            let datasets = [];
+
+            let label_history;
+
+            let graph_labels;
+
+            labels.forEach((label, idx) => {
+                label_history = history.filter((e) => e.name === label);
+                datasets.push({
+                    label: label,
+                    data: label_history.map((e) => e.used),
+                    backgroundColor: "transparent",
+                    borderColor: backgroundColor[idx],
+                    borderWidth: 1,
+                });
+                if (idx === labels.length - 1) {
+                    graph_labels = label_history.map((e) => e.tstp);
+                }
+            });
+
+            var myChart = new Chart(ctx, {
+                type: "line",
+                label: labels,
+                data: {
+                    labels: graph_labels,
+                    datasets: datasets,
+                },
+                options: {
+                    responsive: false,
+                    legend: {
+                        display: false,
+                    },
+                    title: {
+                        display: true,
+                        text: "Tablespaces Used",
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true,
+                    },
+                },
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            console.log("Error Getting Data From API");
+        });
+}
+
+function fetchDatafileHistory(argument) {
+    clearChart(datafileChart);
+    fetch(url + "datafiles/history?groupBy=" + argument, fetchParams)
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error(res.statusText);
+            }
+            return res.json();
+        })
+        .then((data) => {
+
+            var ctx = document.getElementById("myChart");
+
+            let history = data.history;
+
+            let labels = data.entities.map((e) => e.datafile_name);
+
+            let datasets = [];
+
+            let label_history;
+
+            let graph_labels;
+
+            labels.forEach((label, idx) => {
+                label_history = history.filter((e) => e.datafile_name === label);
+                datasets.push({
+                    label: label,
+                    data: label_history.map((e) => e.used),
+                    backgroundColor: "transparent",
+                    borderColor: backgroundColor[idx],
+                    borderWidth: 1,
+                });
+                if (idx === labels.length - 1) {
+                    graph_labels = label_history.map((e) => e.tstp);
+                }
+            });
+
+
+            datafileChart = new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: graph_labels,
+                    datasets: datasets,
+                },
+                options: {
+                    responsive: false,
+                    legend: {
+                        display: false,
+                    },
+                    title: {
+                        display: true,
+                        text: "Datafiles",
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true,
+                    },
+                },
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            console.log("Error Getting Data From API");
+        });
+}
+
+function fetchPDB(argument) {
     document.getElementById("myPDBChart").innerHTML = ""
-    fetch(url + "pdbs/history?groupBy=minute", fetchParams)
+    fetch(url + "pdbs/history?groupBy=" + argument, fetchParams)
         .then((res) => {
             if (!res.ok) {
                 throw new Error(res.statusText);
@@ -83,9 +222,9 @@ function fetchPDB() {
         });
 }
 
-function getSessions() {
+function getSessions(argument) {
     document.getElementById("mySessionChart").innerHTML = ""
-    fetch(url + "sessions/total/history?groupBy=minute", fetchParams)
+    fetch(url + "sessions/total/history?groupBy=" + argument, fetchParams)
         .then((res) => {
             if (!res.ok) {
                 throw new Error(res.statusText);
@@ -137,9 +276,9 @@ function getSessions() {
         });
 }
 
-function fetchCPU() {
+function fetchCPU(argument) {
     document.getElementById("myCPUPie").innerHTML = ""
-    fetch(url + "cpu/history", fetchParams)
+    fetch(url + "cpu/history?groupBy=" + argument, fetchParams)
         .then((res) => {
             if (!res.ok) {
                 throw new Error(res.statusText);
@@ -161,6 +300,7 @@ function fetchCPU() {
                     labels: Array.from(cpuMap.keys()),
 
                     datasets: [{
+
                         data: Array.from(cpuMap.values()),
                         backgroundColor: backgroundColor,
                     }, ],
@@ -231,9 +371,9 @@ function fetchCPU() {
         });
 }*/
 
-function fetchMemory() {
+function fetchMemory(argument) {
     document.getElementById("myMemoryPie").innerHTML = ""
-    fetch(url + "memory/history?groupBy=minute", fetchParams)
+    fetch(url + "memory/history?groupBy=" + argument, fetchParams)
         .then((res) => {
             if (!res.ok) {
                 throw new Error(res.statusText);
@@ -337,10 +477,10 @@ function getUsers() {
         });
 }
 
-function getTableSpaces() {
+function getTableSpaces(argument) {
     document.getElementById("output").innerHTML = ""
 
-    fetch(url + "tablespaces/history", fetchParams)
+    fetch(url + "tablespaces/history?groupBy=" + argument, fetchParams)
         .then((res) => {
             if (!res.ok) {
                 throw new Error(res.statusText);
@@ -393,10 +533,10 @@ function getTableSpaces() {
         });
 }
 
-function getDatafiles() {
+function getDatafiles(argument) {
     document.getElementById("output").innerHTML = ""
 
-    fetch(url + "datafiles/history", fetchParams)
+    fetch(url + "datafiles/history?groupBy=" + argument, fetchParams)
         .then((res) => {
             if (!res.ok) {
                 throw new Error(res.statusText);
@@ -406,13 +546,17 @@ function getDatafiles() {
         .then((data) => {
             let count = 0;
             let output = "";
+
             let datafilesMap = new Map();
+
             data["entities"].forEach(function(names) {
                 datafilesMap.set(`${names.datafile_name}`, []);
             });
+
             data["history"].forEach(function(datafiles) {
-                // console.log([`${datafiles.tablespace_name}`, `${datafiles.datafile_name}`])
+
                 if (datafilesMap.has(`${datafiles.datafile_name}`)) {
+
                     datafilesMap.set(`${datafiles.datafile_name}`, [
                         `${datafiles.tablespace_name}`,
                         `${datafiles.datafile_name}`,
@@ -422,23 +566,23 @@ function getDatafiles() {
                     ]);
                 }
             });
-            console.log(tablespaceMap);
+
 
             for (const [key, value] of datafilesMap.entries()) {
                 count++;
                 output +=
                     `
                 <tr>
-                    <td id="name_` +
+                    <td id="t_name_` +
                     count +
                     `">${value[0]}</td>
-                    <td id="total_` +
+                    <td id="d_name_` +
                     count +
                     `">${value[1]}</td>
-                    <td id="free_` +
+                    <td id="total_` +
                     count +
                     `">${value[2]}</td>
-                    <td id="used_` +
+                    <td id="free_` +
                     count +
                     `">${value[3]}</td>
                     <td id="used_` +
