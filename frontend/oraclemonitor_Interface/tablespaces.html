@@ -17,7 +17,10 @@
     <link href="css/index.css" rel="stylesheet">
     <script src="jscript/getData.js"></script>
     <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
-
+    <script type="text/javascript">
+        // Store
+        localStorage.setItem("time", "minute");
+    </script>
 </head>
 
 <body>
@@ -64,16 +67,16 @@
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <button type="button" class="btn btn-sm btn-outline-secondary" id="forceRefresh" onClick="start()">Force Refresh</button>
 
-                        <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span data-feather="calendar"></span>
-                                Choose Time
-                            </button>
-                        <div class="dropdown-menu">
-                            <button class="dropdown-item" id="byMinute" onClick="start('minute')">By Minute</button>
-                            <button class="dropdown-item" id="byHour" onClick="start('hour')">By Hour</button>
-                            <button class="dropdown-item" id="byHour" onClick="start('day')">By Day</button>
-                            <button class="dropdown-item" id="byHour" onClick="start('month')">By Month</button>
-                            <button class="dropdown-item" id="byHour" onClick="start('year')">By Year</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span data-feather="calendar"></span>
+                            Choose Time
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <button class="dropdown-item" id="byMinute" onClick="let v = localStorage.setItem('time','minute'); start(localStorage.getItem('time'))">By Minute</button>
+                            <button class="dropdown-item" id="byHour" onClick="let v = localStorage.setItem('time','hour'); start(localStorage.getItem('time'))">By Hour</button>
+                            <button class="dropdown-item" id="byHour" onClick="let v = localStorage.setItem('time','day'); start(localStorage.getItem('time'))">By Day</button>
+                            <button class="dropdown-item" id="byHour" onClick="let v = localStorage.setItem('time','month'); start(localStorage.getItem('time'))">By Month</button>
+                            <button class="dropdown-item" id="byHour" onClick="let v = localStorage.setItem('time','year'); start(localStorage.getItem('time'))">By Year</button>
 
                         </div>
                     </div>
@@ -134,7 +137,7 @@
             fetchTablespaceHistory(arg);
             getTableSpaces(arg);
         }
-        document.onload = start("minute");
+        document.onload = start(localStorage.getItem('time'));
     </script>
 
 </body>

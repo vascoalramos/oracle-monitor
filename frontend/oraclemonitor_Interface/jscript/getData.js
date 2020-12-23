@@ -15,6 +15,12 @@ const backgroundColor = [
     "#c45850",
 ];
 let datafileChart = null;
+let tablespaceChart = null;
+let pdbChart = null;
+let memoryChart = null;
+let sessionChart = null;
+let cpuChart = null;
+
 
 function clearChart(objChart) {
     if (objChart != null) {
@@ -25,7 +31,7 @@ function clearChart(objChart) {
 const url = "http://localhost:3000/api/";
 
 function fetchTablespaceHistory(argument) {
-    document.getElementById("myChart").innerHTML = ""
+    clearChart(tablespaceChart);
     fetch(url + "tablespaces/history?groupBy=" + argument, fetchParams)
         .then((res) => {
             if (!res.ok) {
@@ -61,7 +67,7 @@ function fetchTablespaceHistory(argument) {
                 }
             });
 
-            var myChart = new Chart(ctx, {
+            tablespaceChart = new Chart(ctx, {
                 type: "line",
                 label: labels,
                 data: {
@@ -114,7 +120,7 @@ function fetchDatafileHistory(argument) {
             let graph_labels;
 
             labels.forEach((label, idx) => {
-                label_history = history.filter((e) => e.datafile_name === label);
+                label_history = history.filter((e) => e.datafile_name === label).slice(-30);
                 datasets.push({
                     label: label,
                     data: label_history.map((e) => e.used),
@@ -157,7 +163,7 @@ function fetchDatafileHistory(argument) {
 }
 
 function fetchPDB(argument) {
-    document.getElementById("myPDBChart").innerHTML = ""
+    clearChart(pdbChart);
     fetch(url + "pdbs/history?groupBy=" + argument, fetchParams)
         .then((res) => {
             if (!res.ok) {
@@ -194,7 +200,7 @@ function fetchPDB(argument) {
             });
 
 
-            var myChart = new Chart(ctx, {
+            pdbChart = new Chart(ctx, {
                 type: "line",
                 data: {
                     labels: graph_labels,
@@ -223,7 +229,7 @@ function fetchPDB(argument) {
 }
 
 function getSessions(argument) {
-    document.getElementById("mySessionChart").innerHTML = ""
+    clearChart(sessionChart);
     fetch(url + "sessions/total/history?groupBy=" + argument, fetchParams)
         .then((res) => {
             if (!res.ok) {
@@ -245,7 +251,7 @@ function getSessions(argument) {
             vals.forEach(function(v) {
                 datasets.set(v[1], v[0]);
             })
-            var myChart = new Chart(ctx, {
+            sessionChart = new Chart(ctx, {
                 type: "line",
                 data: {
                     labels: Array.from(datasets.keys()),
@@ -277,7 +283,7 @@ function getSessions(argument) {
 }
 
 function fetchCPU(argument) {
-    document.getElementById("myCPUPie").innerHTML = ""
+    clearChart(cpuChart);
     fetch(url + "cpu/history?groupBy=" + argument, fetchParams)
         .then((res) => {
             if (!res.ok) {
@@ -294,7 +300,7 @@ function fetchCPU(argument) {
                 cpuMap.set(`${character.username}`, `${character.value}`);
             });
 
-            var myChart = new Chart(ctx, {
+            cpuChart = new Chart(ctx, {
                 type: "bar",
                 data: {
                     labels: Array.from(cpuMap.keys()),
@@ -372,7 +378,7 @@ function fetchCPU(argument) {
 }*/
 
 function fetchMemory(argument) {
-    document.getElementById("myMemoryPie").innerHTML = ""
+    clearChart(memoryChart);
     fetch(url + "memory/history?groupBy=" + argument, fetchParams)
         .then((res) => {
             if (!res.ok) {
@@ -399,7 +405,7 @@ function fetchMemory(argument) {
 
 
 
-            var myChart = new Chart(ctx, {
+            memoryChart = new Chart(ctx, {
                 type: "line",
                 data: {
                     labels: Array.from(total.keys()),
