@@ -36,7 +36,7 @@ router.get("/history", (req, res) => {
     let tablespace = req.query.tablespace;
 
     controller
-        .filter(tablespace)
+        .list()
         .then((data) => {
             final_data["entities"] = data;
             let groupBy_exists = "groupBy" in req.query;
@@ -67,6 +67,8 @@ router.get("/history", (req, res) => {
                         res.status(500).jsonp(error);
                     });
             } else if (groupBy_exists) {
+                console.log("here");
+                console.log(final_data);
                 let groupBy = req.query.groupBy;
                 if (groupBy_belongs(groupBy)) {
                     controller
