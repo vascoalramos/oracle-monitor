@@ -18,7 +18,7 @@ const backgroundColor = [
     "#998F8F",
     "#E89513",
     "#9F25CF",
-    "#c45850", ,
+    "#c45850",
     "#1B6DF1",
     "#F01BF1",
 ];
@@ -29,7 +29,6 @@ let pdbChart = null;
 let memoryChart = null;
 let sessionChart = null;
 let cpuChart = null;
-
 
 function clearChart(objChart) {
     if (objChart != null) {
@@ -49,7 +48,6 @@ function fetchTablespaceHistory(argument) {
             return res.json();
         })
         .then((data) => {
-
             var ctx = document.getElementById("myChart");
 
             let history = data.history;
@@ -86,12 +84,14 @@ function fetchTablespaceHistory(argument) {
                 options: {
                     responsive: false,
                     scales: {
-                        yAxes: [{
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'Size Used (MB)'
-                            }
-                        }]
+                        yAxes: [
+                            {
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: "Size Used (MB)",
+                                },
+                            },
+                        ],
                     },
                     legend: {
                         display: false,
@@ -123,7 +123,6 @@ function fetchDatafileHistory(argument) {
             return res.json();
         })
         .then((data) => {
-
             var ctx = document.getElementById("myChart");
 
             let history = data.history;
@@ -150,7 +149,6 @@ function fetchDatafileHistory(argument) {
                 }
             });
 
-
             datafileChart = new Chart(ctx, {
                 type: "line",
                 data: {
@@ -159,12 +157,14 @@ function fetchDatafileHistory(argument) {
                 },
                 options: {
                     scales: {
-                        yAxes: [{
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'Size Used (MB)'
-                            }
-                        }]
+                        yAxes: [
+                            {
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: "Size Used (MB)",
+                                },
+                            },
+                        ],
                     },
                     responsive: false,
                     legend: {
@@ -197,7 +197,6 @@ function fetchPDB(argument) {
             return res.json();
         })
         .then((data) => {
-
             var ctx = document.getElementById("myPDBChart");
 
             let history = data.history;
@@ -224,7 +223,6 @@ function fetchPDB(argument) {
                 }
             });
 
-
             pdbChart = new Chart(ctx, {
                 type: "line",
                 data: {
@@ -233,12 +231,14 @@ function fetchPDB(argument) {
                 },
                 options: {
                     scales: {
-                        yAxes: [{
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'Value of Size (GB)'
-                            }
-                        }]
+                        yAxes: [
+                            {
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: "Value of Size (GB)",
+                                },
+                            },
+                        ],
                     },
                     responsive: false,
                     legend: {
@@ -271,39 +271,42 @@ function getSessions(argument) {
             return res.json();
         })
         .then((data) => {
-
             var ctx = document.getElementById("mySessionChart");
 
-            let vals = []
+            let vals = [];
 
             let datasets = new Map();
-            data.forEach(function(val) {
+            data.forEach(function (val) {
                 vals.push([parseInt(`${val.total}`), `${val.tstp}`]);
-            })
+            });
 
-            vals.forEach(function(v) {
+            vals.forEach(function (v) {
                 datasets.set(v[1], v[0]);
-            })
+            });
             sessionChart = new Chart(ctx, {
                 type: "line",
                 data: {
                     labels: Array.from(datasets.keys()),
-                    datasets: [{
-                        label: 'Session value',
-                        data: Array.from(datasets.values()),
-                        backgroundColor: "transparent",
-                        borderColor: backgroundColor[1],
-                        borderWidth: 1,
-                    }]
+                    datasets: [
+                        {
+                            label: "Session value",
+                            data: Array.from(datasets.values()),
+                            backgroundColor: "transparent",
+                            borderColor: backgroundColor[1],
+                            borderWidth: 1,
+                        },
+                    ],
                 },
                 options: {
                     scales: {
-                        yAxes: [{
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'Number of Sessions'
-                            }
-                        }]
+                        yAxes: [
+                            {
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: "Number of Sessions",
+                                },
+                            },
+                        ],
                     },
                     responsive: false,
                     legend: {
@@ -313,7 +316,6 @@ function getSessions(argument) {
                         display: true,
                         text: "Total of Sessions Over Time",
                     },
-
                 },
             });
         })
@@ -337,7 +339,7 @@ function fetchCPU(argument) {
 
             let cpuMap = new Map();
 
-            data.forEach(function(character) {
+            data.forEach(function (character) {
                 cpuMap.set(`${character.username}`, `${character.value}`);
             });
 
@@ -346,14 +348,14 @@ function fetchCPU(argument) {
                 data: {
                     labels: Array.from(cpuMap.keys()),
 
-                    datasets: [{
-
-                        data: Array.from(cpuMap.values()),
-                        backgroundColor: backgroundColor,
-                    }, ],
+                    datasets: [
+                        {
+                            data: Array.from(cpuMap.values()),
+                            backgroundColor: backgroundColor,
+                        },
+                    ],
                 },
                 options: {
-
                     responsive: false,
                     legend: {
                         display: false,
@@ -374,7 +376,6 @@ function fetchCPU(argument) {
         });
 }
 
-
 function fetchMemory(argument) {
     clearChart(memoryChart);
     fetch(url + "memory/history?groupBy=" + argument, fetchParams)
@@ -391,51 +392,53 @@ function fetchMemory(argument) {
             let total = new Map();
             let used = new Map();
 
-
-            data.forEach(function(val) {
+            data.forEach(function (val) {
                 vals.push([parseInt(`${val.total}`), parseInt(`${val.used}`), `${val.tstp}`]);
             });
 
-            vals.forEach(function(v) {
+            vals.forEach(function (v) {
                 total.set(v[2], v[0]);
                 used.set(v[2], v[1]);
-            })
-
-
+            });
 
             memoryChart = new Chart(ctx, {
                 type: "line",
                 data: {
                     labels: Array.from(total.keys()),
-                    datasets: [{
-                        label: 'Total',
-                        data: Array.from(total.values()),
-                        backgroundColor: "transparent",
-                        borderColor: backgroundColor[1],
-                        borderWidth: 1,
-                    }, {
-                        label: 'Used',
-                        data: Array.from(used.values()),
-                        backgroundColor: "transparent",
-                        borderColor: backgroundColor[6],
-                        borderWidth: 1,
-                    }],
+                    datasets: [
+                        {
+                            label: "Total",
+                            data: Array.from(total.values()),
+                            backgroundColor: "transparent",
+                            borderColor: backgroundColor[1],
+                            borderWidth: 1,
+                        },
+                        {
+                            label: "Used",
+                            data: Array.from(used.values()),
+                            backgroundColor: "transparent",
+                            borderColor: backgroundColor[6],
+                            borderWidth: 1,
+                        },
+                    ],
                 },
                 options: {
                     scales: {
-                        yAxes: [{
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'Value (MB)'
-                            }
-                        }]
+                        yAxes: [
+                            {
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: "Value (MB)",
+                                },
+                            },
+                        ],
                     },
                     title: {
                         display: true,
                         text: "Memory Usage (MB)",
                     },
-                    responsive: false
-                }
+                    responsive: false,
+                },
             });
         })
         .catch((err) => {
@@ -444,7 +447,7 @@ function fetchMemory(argument) {
 }
 
 function getUsers() {
-    document.getElementById("output").innerHTML = ""
+    document.getElementById("output").innerHTML = "";
 
     fetch(url + "users", fetchParams)
         .then((res) => {
@@ -457,7 +460,7 @@ function getUsers() {
             let count = 0;
             let output = "";
 
-            data.forEach(function(user) {
+            data.forEach(function (user) {
                 count++;
                 output +=
                     `
@@ -490,7 +493,7 @@ function getUsers() {
 }
 
 function getTableSpaces(argument) {
-    document.getElementById("output").innerHTML = ""
+    document.getElementById("output").innerHTML = "";
 
     fetch(url + "tablespaces/history?groupBy=" + argument, fetchParams)
         .then((res) => {
@@ -503,10 +506,10 @@ function getTableSpaces(argument) {
             let count = 0;
             let output = "";
             let tablespaceMap = new Map();
-            data["entities"].forEach(function(names) {
+            data["entities"].forEach(function (names) {
                 tablespaceMap.set(`${names.name}`, []);
             });
-            data["history"].forEach(function(tablespaces) {
+            data["history"].forEach(function (tablespaces) {
                 if (tablespaceMap.has(`${tablespaces.name}`)) {
                     tablespaceMap.set(`${tablespaces.name}`, [
                         `${tablespaces.name}`,
@@ -546,7 +549,7 @@ function getTableSpaces(argument) {
 }
 
 function getDatafiles(argument) {
-    document.getElementById("output").innerHTML = ""
+    document.getElementById("output").innerHTML = "";
 
     fetch(url + "datafiles/history?groupBy=" + argument, fetchParams)
         .then((res) => {
@@ -561,14 +564,12 @@ function getDatafiles(argument) {
 
             let datafilesMap = new Map();
 
-            data["entities"].forEach(function(names) {
+            data["entities"].forEach(function (names) {
                 datafilesMap.set(`${names.datafile_name}`, []);
             });
 
-            data["history"].forEach(function(datafiles) {
-
+            data["history"].forEach(function (datafiles) {
                 if (datafilesMap.has(`${datafiles.datafile_name}`)) {
-
                     datafilesMap.set(`${datafiles.datafile_name}`, [
                         `${datafiles.tablespace_name}`,
                         `${datafiles.datafile_name}`,
@@ -578,7 +579,6 @@ function getDatafiles(argument) {
                     ]);
                 }
             });
-
 
             for (const [key, value] of datafilesMap.entries()) {
                 count++;
