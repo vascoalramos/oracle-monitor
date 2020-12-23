@@ -11,16 +11,16 @@
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet"
             type="text/css">
 
-        <title>AEBD - Home</title>
+        <title>AEBD - Tablespace Details</title>
         <!-- Custom styles for this template -->
 
         <link href="css/index.css" rel="stylesheet">
         <script src="jscript/getData.js"></script>
+        <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
         <script type="text/javascript">
             // Store
             localStorage.setItem("time", "minute");
         </script>
-
     </head>
 
     <body>
@@ -67,7 +67,7 @@
                         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                         <h1 class="h2">Dashboard</h1>
                         <div class="btn-toolbar mb-2 mb-md-0">
-                            <button type="button" class="btn btn-sm btn-outline-secondary"
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="forceRefresh"
                                 onClick="start(localStorage.getItem('time'))">Force Refresh</button>
 
                             <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle"
@@ -96,41 +96,33 @@
                         </div>
                     </div>
 
-                    <div class="container">
-                        <div class="row ">
-                            <div class="col-6"> <canvas class="my-4" id="myMemoryPie" width="500" height="300"></canvas>
-                            </div>
-                            <div class="col-6"> <canvas class="my-4" id="mySessionChart" width="500"
-                                    height="300"></canvas>
-                            </div>
-                            <div class="col-6"> <canvas class="my-4" id="myCPUPie" width="500" height="300"></canvas>
-                            </div>
-                            <div class="col-6"> <canvas class="my-4" id="myPDBChart" width="500" height="300"></canvas>
+                    <div class="row row-cols-2">
+                        <div class="col-5"> <canvas class="my-4" id="myChart" width="500" height="300"></canvas></div>
+                        <div class="col-7">
+                            <h2>Tablespace Details</h2>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Total (MB)</th>
+                                            <th>Free (MB)</th>
+                                            <th>Used (MB)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="output">
+                                    </tbody>
+                                </table>
+                                <!-- End -->
                             </div>
                         </div>
                     </div>
-
-                    <h2>Users</h2>
-                    <div class="table-responsive">
-                        <table class="table table-striped table-sm">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Status</th>
-                                    <th>Default Tablespace</th>
-                                    <th>Temporary Tablespace</th>
-                                    <th>Last Login</th>
-                                </tr>
-                            </thead>
-                            <tbody id="output">
-                            </tbody>
-                        </table>
-                        <!-- End -->
-                    </div>
-                </main>
             </div>
-        </div>
 
+
+            </main>
+        </div>
+        </div>
         <footer class="footer mt-auto py-3">
             <div class="container">
                 <span class="text-muted">Place sticky footer content here.</span>
@@ -152,7 +144,6 @@
 
 
 
-
         <!-- Icons -->
         <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
         <script>
@@ -161,15 +152,11 @@
 
         <!-- Graphs -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
-        <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
         <script type="text/javascript">
             function start(arg) {
-                fetchCPU(arg);
-                fetchMemory(arg);
-                fetchPDB(arg);
-                getSessions(arg);
-                getUsers();
-            };
+                fetchTablespaceHistory(arg);
+                getTableSpaces(arg);
+            }
 
             window.onload = function () {
                 start(localStorage.getItem('time'))
@@ -178,7 +165,6 @@
                 }, 30000);
             }
         </script>
-
 
     </body>
 

@@ -1,142 +1,170 @@
 <!doctype html>
 <html lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet"
+            type="text/css">
 
-    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+        <title>AEBD - Datafiles</title>
+        <!-- Custom styles for this template -->
 
-    <title>Dashboard Template for Bootstrap</title>
-    <!-- Custom styles for this template -->
+        <link href="css/index.css" rel="stylesheet">
+        <script src="jscript/getData.js"></script>
+        <script type="text/javascript">
+            // Store
+            localStorage.setItem("time", "minute");
+        </script>
 
-    <link href="css/index.css" rel="stylesheet">
-    <script src="jscript/getCharts.js"></script>
-    <script src="jscript/getData.js"></script>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+            <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="index.html">AEBD</a>
+        </nav>
+
+        <div class="container-fluid">
+            <div class="row">
+                <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                    <div class="sidebar-sticky">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="index.html">
+                                    <span data-feather="home"></span> Dashboard <span class="sr-only">(current)</span>
+                                </a>
+                            </li>
+                            <h6
+                                class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                                <span>View</span>
+                                <a class="d-flex align-items-center text-muted" href="#">
+
+                                </a>
+                            </h6>
+                            <li class="nav-item">
+                                <a class="nav-link" href="tablespaces.html">
+                                    <span data-feather="file"></span> Tablespaces
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="datafiles.html">
+                                    <span data-feather="file"></span> Datafiles
+                                </a>
+                            </li>
+
+                        </ul>
 
 
-</head>
+                    </div>
+                </nav>
 
-<body>
-    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="index.html">AEBD</a>
-    </nav>
+                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                    <div
+                        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Dashboard</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="forceRefresh"
+                                onClick="start(localStorage.getItem('time'));">Force Refresh</button>
 
-    <div class="container-fluid">
-        <div class="row">
-            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-                <div class="sidebar-sticky">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="index.html">
-                                <span data-feather="home"></span> Dashboard <span class="sr-only">(current)</span>
-                            </a>
-                        </li>
-                        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                            <span>View</span>
-                            <a class="d-flex align-items-center text-muted" href="#">
-
-                            </a>
-                        </h6>
-                        <li class="nav-item">
-                            <a class="nav-link" href="datafiles.html">
-                                <span data-feather="file"></span> Datafiles
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="tablespaces.html">
-                                <span data-feather="file"></span> Tablespaces
-                            </a>
-                        </li>
-
-                    </ul>
-
-
-                </div>
-            </nav>
-
-            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Dashboard</h1>
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                        <button type="button" class="btn btn-sm btn-outline-secondary" id="forceRefresh" onClick="window.location.reload();">Force Refresh</button>
-
-                        <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span data-feather="calendar"></span>
-                                This week
+                                Choose Time
                             </button>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <button class="dropdown-item" id="byMinute"
+                                    onClick="let v = localStorage.setItem('time','minute'); start(localStorage.getItem('time'))">By
+                                    Minute</button>
+                                <button class="dropdown-item" id="byHour"
+                                    onClick="let v = localStorage.setItem('time','hour'); start(localStorage.getItem('time'))">By
+                                    Hour</button>
+                                <button class="dropdown-item" id="byHour"
+                                    onClick="let v = localStorage.setItem('time','day'); start(localStorage.getItem('time'))">By
+                                    Day</button>
+                                <button class="dropdown-item" id="byHour"
+                                    onClick="let v = localStorage.setItem('time','month'); start(localStorage.getItem('time'))">By
+                                    Month</button>
+                                <button class="dropdown-item" id="byHour"
+                                    onClick="let v = localStorage.setItem('time','year'); start(localStorage.getItem('time'))">By
+                                    Year</button>
+
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row row-cols-2">
-                    <div class="col"> <canvas class="my-4" id="myChart" width="500" height="300"></canvas></div>
-                    <div class="col">
-                        <h2>Datafiles</h2>
-                        <div class="table-responsive">
-                            <table class="table table-striped table-sm">
-                                <thead>
-                                    <tr>
-                                        <th>Tablespace Name</th>
-                                        <th>Datafile Name</th>
-                                        <th>Total</th>
-                                        <th>Free</th>
-                                        <th>Used</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="output">
-                                </tbody>
-                            </table>
-                            <!-- End -->
+                    <div class="row row-cols-2">
+                        <div class="col-5"> <canvas class="my-4" id="myChart" width="500" height="300"></canvas></div>
+                        <div class="col-7">
+                            <h2>Datafiles</h2>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Tablespace Name</th>
+                                            <th>Datafile Name</th>
+                                            <th>Total (MB) </th>
+                                            <th>Free (MB)</th>
+                                            <th>Used (MB)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="output">
+                                    </tbody>
+                                </table>
+                                <!-- End -->
+                            </div>
                         </div>
                     </div>
-                </div>
+                </main>
+            </div>
         </div>
+        <footer class="footer mt-auto py-3">
+            <div class="container">
+                <span class="text-muted">Place sticky footer content here.</span>
+            </div>
+        </footer>
 
 
-        </main>
-    </div>
-    </div>
-    <footer class="footer mt-auto py-3">
-        <div class="container">
-            <span class="text-muted">Place sticky footer content here.</span>
-        </div>
-    </footer>
-
-
-    <!-- Bootstrap core JavaScript
+        <!-- Bootstrap core JavaScript
     ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
 
 
-    <!-- Icons -->
-    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
-    <script>
-        feather.replace()
-    </script>
+        <!-- Icons -->
+        <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+        <script>
+            feather.replace()
+        </script>
 
-    <!-- Graphs -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
-    <script type="text/javascript">
-        function start() {
-            getPDBChart();
-            getDatafiles();
-        }
-        document.onload = start();
-        setInterval(getPDBChart(), 10000);
-    </script>
+        <!-- Graphs -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+        <script type="text/javascript">
+            function start(arg) {
+                fetchDatafileHistory(arg);
+                getDatafiles(arg);
+            }
 
-</body>
+            window.onload = function () {
+                start(localStorage.getItem('time'))
+                setInterval(() => {
+                    start(localStorage.getItem('time'))
+                }, 30000);
+            }
+        </script>
+
+
+    </body>
 
 </html>
