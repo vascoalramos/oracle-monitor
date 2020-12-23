@@ -11,15 +11,13 @@
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet"
             type="text/css">
 
-        <title>AEBD - Home</title>
+        <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+
+        <title>AEBD</title>
         <!-- Custom styles for this template -->
 
         <link href="css/index.css" rel="stylesheet">
         <script src="jscript/getData.js"></script>
-        <script type="text/javascript">
-            // Store
-            localStorage.setItem("time", "minute");
-        </script>
 
     </head>
 
@@ -46,13 +44,13 @@
                                 </a>
                             </h6>
                             <li class="nav-item">
-                                <a class="nav-link" href="tablespaces.html">
-                                    <span data-feather="file"></span> Tablespaces
+                                <a class="nav-link" href="datafiles.html">
+                                    <span data-feather="file"></span> Datafiles
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="datafiles.html">
-                                    <span data-feather="file"></span> Datafiles
+                                <a class="nav-link" href="tablespaces.html">
+                                    <span data-feather="file"></span> Tablespaces
                                 </a>
                             </li>
 
@@ -67,31 +65,18 @@
                         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                         <h1 class="h2">Dashboard</h1>
                         <div class="btn-toolbar mb-2 mb-md-0">
-                            <button type="button" class="btn btn-sm btn-outline-secondary"
-                                onClick="start(localStorage.getItem('time'))">Force Refresh</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" onClick="start();">Force
+                                Refresh</button>
 
-                            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
                                 <span data-feather="calendar"></span>
-                                Choose Time
+                                This week
                             </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <button class="dropdown-item" id="byMinute"
-                                    onClick="let v = localStorage.setItem('time','minute'); start(localStorage.getItem('time'))">By
-                                    Minute</button>
-                                <button class="dropdown-item" id="byHour"
-                                    onClick="let v = localStorage.setItem('time','hour'); start(localStorage.getItem('time'))">By
-                                    Hour</button>
-                                <button class="dropdown-item" id="byHour"
-                                    onClick="let v = localStorage.setItem('time','day'); start(localStorage.getItem('time'))">By
-                                    Day</button>
-                                <button class="dropdown-item" id="byHour"
-                                    onClick="let v = localStorage.setItem('time','month'); start(localStorage.getItem('time'))">By
-                                    Month</button>
-                                <button class="dropdown-item" id="byHour"
-                                    onClick="let v = localStorage.setItem('time','year'); start(localStorage.getItem('time'))">By
-                                    Year</button>
-
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
                             </div>
                         </div>
                     </div>
@@ -163,20 +148,14 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
         <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
         <script type="text/javascript">
-            function start(arg) {
-                fetchCPU(arg);
-                fetchMemory(arg);
-                fetchPDB(arg);
-                getSessions(arg);
+            function start() {
+                fetchCPU();
+                fetchMemory();
+                fetchPDB();
+                getSessions();
                 getUsers();
             };
-
-            window.onload = function () {
-                start(localStorage.getItem('time'))
-                setInterval(() => {
-                    start(localStorage.getItem('time'))
-                }, 30000);
-            }
+            document.onload = start();
         </script>
 
 
