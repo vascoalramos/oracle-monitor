@@ -15,7 +15,6 @@
     <!-- Custom styles for this template -->
 
     <link href="css/index.css" rel="stylesheet">
-    <script src="jscript/getCharts.js"></script>
     <script src="jscript/getData.js"></script>
 
 </head>
@@ -65,24 +64,27 @@
                         <button type="button" class="btn btn-sm btn-outline-secondary" onClick="start();">Force Refresh</button>
 
                         <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span data-feather="calendar"></span>
-                                This week
-                            </button>
+                            <span data-feather="calendar"></span>
+                            Choose Time
+                        </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
+                            <button class="dropdown-item" id="byMinute" onClick="start('minute')">By Minute</button>
+                            <button class="dropdown-item" id="byHour" onClick="start('hour')">By Hour</button>
+                            <button class="dropdown-item" id="byHour" onClick="start('day')">By Day</button>
+                            <button class="dropdown-item" id="byHour" onClick="start('month')">By Month</button>
+                            <button class="dropdown-item" id="byHour" onClick="start('year')">By Year</button>
+
                         </div>
                     </div>
                 </div>
 
                 <div class="container">
                     <div class="row ">
-                        <div class="col-6"> <canvas class="my-4" id="myMemoryPie" width="500"  height="300"></canvas>
+                        <div class="col-6"> <canvas class="my-4" id="myMemoryPie" width="500" height="300"></canvas>
                         </div>
                         <div class="col-6"> <canvas class="my-4" id="mySessionChart" width="500" height="300"></canvas>
                         </div>
-                        <div class="col-6"> <canvas class="my-4" id="myCPUPie" width="500"  height="300"></canvas>
+                        <div class="col-6"> <canvas class="my-4" id="myCPUPie" width="500" height="300"></canvas>
                         </div>
                         <div class="col-6"> <canvas class="my-4" id="myPDBChart" width="500" height="300"></canvas>
                         </div>
@@ -136,14 +138,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
     <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
     <script type="text/javascript">
-        function start() {
-            fetchCPU();
-            fetchMemory();
-            fetchPDB();
-            getSessions();
+        function start(arg) {
+            fetchCPU(arg);
+            fetchMemory(arg);
+            fetchPDB(arg);
+            getSessions(arg);
             getUsers();
         };
-        document.onload = start();
+        document.onload = start('minute');
     </script>
 
 

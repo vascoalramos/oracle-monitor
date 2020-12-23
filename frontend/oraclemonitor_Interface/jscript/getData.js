@@ -14,7 +14,7 @@ const backgroundColor = [
     "#e8c3b9",
     "#c45850",
 ];
-const datafileChart = null;
+let datafileChart = null;
 
 function clearChart(objChart) {
     if (objChart != null) {
