@@ -1,169 +1,458 @@
 const fetchParams = {
     method: "GET",
     mode: "cors",
-    cache: "default"
+    cache: "default",
 };
+const backgroundColor = [
+    "#0074D9",
+    "#FF4136",
+    "#2ECC40",
+    "#FF851B",
+    "#3e95cd",
+    "#8e5ea2",
+    "#3cba9f",
+    "#e8c3b9",
+    "#c45850",
+];
 
 const url = "http://localhost:3000/api/";
 
-
-function fetchMemory() {
-    fetch(url + 'memory/history', fetchParams)
-        .then(res => {
+function fetchPDB() {
+    document.getElementById("myPDBChart").innerHTML = ""
+    fetch(url + "pdbs/history?groupBy=minute", fetchParams)
+        .then((res) => {
             if (!res.ok) {
                 throw new Error(res.statusText);
             }
             return res.json();
         })
-        .then(data => {
+        .then((data) => {
+
+            var ctx = document.getElementById("myPDBChart");
+
+            let history = data.history;
+
+            let labels = data.entities.map((e) => e.name);
+
+            let datasets = [];
+
+            let label_history;
+
+            let graph_labels;
+
+            labels.forEach((label, idx) => {
+                label_history = history.filter((e) => e.name === label);
+                datasets.push({
+                    label: label,
+                    data: label_history.map((e) => e.size),
+                    backgroundColor: "transparent",
+                    borderColor: backgroundColor[idx],
+                    borderWidth: 1,
+                });
+                if (idx === labels.length - 1) {
+                    graph_labels = label_history.map((e) => e.tstp);
+                }
+            });
+
+
+            var myChart = new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: graph_labels,
+                    datasets: datasets,
+                },
+                options: {
+                    responsive: false,
+                    legend: {
+                        display: false,
+                    },
+                    title: {
+                        display: true,
+                        text: "PDBs",
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true,
+                    },
+                },
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            console.log("Error Getting Data From API");
+        });
+}
+
+function getSessions() {
+    document.getElementById("mySessionChart").innerHTML = ""
+    fetch(url + "sessions/total/history?groupBy=minute", fetchParams)
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error(res.statusText);
+            }
+            return res.json();
+        })
+        .then((data) => {
+
+            var ctx = document.getElementById("mySessionChart");
+
+            let vals = []
+
+            let datasets = new Map();
+            data.forEach(function(val) {
+                vals.push([parseInt(`${val.total}`), `${val.tstp}`]);
+            })
+
+            vals.forEach(function(v) {
+                datasets.set(v[1], v[0]);
+            })
+            var myChart = new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: Array.from(datasets.keys()),
+                    datasets: [{
+                        label: 'Session value',
+                        data: Array.from(datasets.values()),
+                        backgroundColor: "transparent",
+                        borderColor: backgroundColor[1],
+                        borderWidth: 1,
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    legend: {
+                        display: false,
+                    },
+                    title: {
+                        display: true,
+                        text: "Sessions",
+                    },
+
+                },
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            console.log("Error Getting Data From API");
+        });
+}
+
+function fetchCPU() {
+    document.getElementById("myCPUPie").innerHTML = ""
+    fetch(url + "cpu/history", fetchParams)
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error(res.statusText);
+            }
+            return res.json();
+        })
+        .then((data) => {
+            var ctx = document.getElementById("myCPUPie");
+
+            let cpuMap = new Map();
+
+            data.forEach(function(character) {
+                cpuMap.set(`${character.username}`, `${character.value}`);
+            });
+
+            var myChart = new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: Array.from(cpuMap.keys()),
+
+                    datasets: [{
+                        data: Array.from(cpuMap.values()),
+                        backgroundColor: backgroundColor,
+                    }, ],
+                },
+                options: {
+                    responsive: false,
+                    legend: {
+                        display: false,
+                    },
+                    title: {
+                        display: true,
+                        text: "CPU Usage",
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true,
+                    },
+                },
+            });
+        })
+        .catch((err) => {
+            console.log("Error Getting Data From API");
+        });
+}
+
+/*function fetchMemory() {
+    document.getElementById("myMemoryPie").innerHTML = ""
+    fetch(url + "memory/history", fetchParams)
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error(res.statusText);
+            }
+            return res.json();
+        })
+        .then((data) => {
+            var ctx = document.getElementById("myMemoryPie");
             let characterData = [];
             data.forEach(function(character) {
                 characterData.push([parseInt(character.total), parseInt(character.used)]);
             });
-            const chartOneData = {
+            var myPieChart = new Chart(ctx, {
                 type: "pie",
-                title: {
-                    text: "Fetch + REST API Endpoint Demo",
-                    adjustLayout: true
+                data: {
+                    labels: ["Total", "Used"],
+                    datasets: [{
+                        data: characterData[characterData.length - 1],
+                        backgroundColor: ["#0074D9", "#FF4136"],
+                    }, ],
                 },
-                scaleX: {
-                    item: {
-                        angle: '-45'
-                    }
+                options: {
+                    responsive: true,
+                    legend: {
+                        position: "top",
+                    },
+                    title: {
+                        display: true,
+                        text: "Memory Usage",
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true,
+                    },
                 },
-                series: [{
-                    values: characterData
-                }],
-                plotarea: {
-                    margin: 'dynamic'
-                }
-            };
-            zingchart.render({
-                id: "myChart",
-                data: chartOneData,
-                height: "100%",
-                width: "100%"
             });
         })
-        .catch(err => {
+        .catch((err) => {
             console.log("Error Getting Data From API");
         });
+}*/
 
+function fetchMemory() {
+    document.getElementById("myMemoryPie").innerHTML = ""
+    fetch(url + "memory/history?groupBy=minute", fetchParams)
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error(res.statusText);
+            }
+            return res.json();
+        })
+        .then((data) => {
+            var ctx = document.getElementById("myMemoryPie");
+
+            let vals = [];
+            let total = new Map();
+            let used = new Map();
+
+
+            data.forEach(function(val) {
+                vals.push([parseInt(`${val.total}`), parseInt(`${val.used}`), `${val.tstp}`]);
+            });
+
+            vals.forEach(function(v) {
+                total.set(v[2], v[1]);
+                used.set(v[2], v[0]);
+            })
+
+
+
+            var myChart = new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: Array.from(total.keys()),
+                    datasets: [{
+                        label: 'Total',
+                        data: Array.from(total.values()),
+                        backgroundColor: "transparent",
+                        borderColor: backgroundColor[1],
+                        borderWidth: 1,
+                    }, {
+                        label: 'Used',
+                        data: Array.from(used.values()),
+                        backgroundColor: "transparent",
+                        borderColor: backgroundColor[6],
+                        borderWidth: 1,
+                    }],
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: "Memory Usage",
+                    },
+                    responsive: false
+                }
+            });
+        })
+        .catch((err) => {
+            console.log("Error Getting Data From API");
+        });
 }
 
 function getUsers() {
-    fetch(url + 'users', fetchParams)
-        .then(res => {
+    document.getElementById("output").innerHTML = ""
+
+    fetch(url + "users", fetchParams)
+        .then((res) => {
             if (!res.ok) {
                 throw new Error(res.statusText);
             }
             return res.json();
         })
-        .then(data => {
+        .then((data) => {
             let count = 0;
-            let output = '';
+            let output = "";
 
             data.forEach(function(user) {
                 count++;
-                output += `
-                <li class="list-group-item">
-                    <!-- Custom content-->
-                    <div class="media align-items-lg-center flex-column flex-lg-row p-3">
-                    <div class="media-body order-2 order-lg-1">
-                          <h5 class="mt-0 font-weight-bold mb-2" id="name_` + count + `">Name: ${user.name}</h5>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item" id="status_` + count + `">Status: ${user.status} </li>
-                                <li class="list-group-item" id="def_tablespace_` + count + `">Default Tablespace: ${user.defaylt_tablespace}</li>
-                                <li class="list-group-item" id="temp_tablespace_` + count + `">Temp Tablespace: ${user.temp_tablespace}</li>
-                                <li class="list-group-item" id="last_login_` + count + `">Last Login: ${user.last_login}</li>
-                                </ul>
-                        </div>
-                    </div>
-                    <!-- End -->
-                </li>
+                output +=
+                    `
+                <tr>
+                <td id="name_` +
+                    count +
+                    `">${user.name}</td>
+                <td id="status_` +
+                    count +
+                    `">${user.status} </td>
+                <td id="def_tablespace_` +
+                    count +
+                    `"> ${user.default_tablespace}</td>
+                <td id="temp_tablespace_` +
+                    count +
+                    `">${user.temp_tablespace}</td>
+                <td id="last_login_` +
+                    count +
+                    `"> ${user.last_login}</td>
+              </tr>            
+             <!-- End -->
                          `;
-
             });
 
-            document.getElementById('output').innerHTML = output;
+            document.getElementById("output").innerHTML = output;
         })
-        .catch(err => {
+        .catch((err) => {
             console.log("Error Getting Data From API");
         });
 }
 
-
 function getTableSpaces() {
-    fetch(url + 'tablespaces', fetchParams)
-        .then(res => {
+    document.getElementById("output").innerHTML = ""
+
+    fetch(url + "tablespaces/history", fetchParams)
+        .then((res) => {
             if (!res.ok) {
                 throw new Error(res.statusText);
             }
             return res.json();
         })
-        .then(data => {
+        .then((data) => {
             let count = 0;
-            let output = '';
-
-            data.forEach(function(tablespaces) {
-                count++;
-                output += `
-                <li class="list-group-item">
-                    <!-- Custom content-->
-                    <div class="media align-items-lg-center flex-column flex-lg-row p-3">
-                    <div class="media-body order-2 order-lg-1">
-                          <h5 class="mt-0 font-weight-bold mb-2" id="name_` + count + `">Name: ${tablespaces.name}</h5>
-            
-                        </div>
-                    </div>
-                    <!-- End -->
-                </li>
-                         `;
-
+            let output = "";
+            let tablespaceMap = new Map();
+            data["entities"].forEach(function(names) {
+                tablespaceMap.set(`${names.name}`, []);
             });
+            data["history"].forEach(function(tablespaces) {
+                if (tablespaceMap.has(`${tablespaces.name}`)) {
+                    tablespaceMap.set(`${tablespaces.name}`, [
+                        `${tablespaces.name}`,
+                        `${tablespaces.total}`,
+                        `${tablespaces.free}`,
+                        `${tablespaces.used}`,
+                    ]);
+                }
+            });
+            for (const [key, value] of tablespaceMap.entries()) {
+                count++;
+                output +=
+                    `
+                <tr>
+                    <td id="name_` +
+                    count +
+                    `">${value[0]}</td>
+                    <td id="total_` +
+                    count +
+                    `">${value[1]}</td>
+                    <td id="free_` +
+                    count +
+                    `">${value[2]}</td>
+                    <td id="used_` +
+                    count +
+                    `">${value[3]}</td>
+                </tr>       
+          
+                     `;
+            }
 
-            document.getElementById('output').innerHTML = output;
+            document.getElementById("output").innerHTML = output;
         })
-        .catch(err => {
+        .catch((err) => {
             console.log("Error Getting Data From API");
         });
 }
 
 function getDatafiles() {
-    fetch(url + 'datafiles', fetchParams)
-        .then(res => {
+    document.getElementById("output").innerHTML = ""
+
+    fetch(url + "datafiles/history", fetchParams)
+        .then((res) => {
             if (!res.ok) {
                 throw new Error(res.statusText);
             }
             return res.json();
         })
-        .then(data => {
+        .then((data) => {
             let count = 0;
-            let output = '';
-
-            data.forEach(function(datafiles) {
-                count++;
-                output += `
-            <li class="list-group-item">
-                <!-- Custom content-->
-                <div class="media align-items-lg-center flex-column flex-lg-row p-3">
-                <div class="media-body order-2 order-lg-1">
-                      <h5 class="mt-0 font-weight-bold mb-2" id="tablespace_name_` + count + `">Tablespace: ${datafiles.tablespace_name}</h5>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item" id="datafile_name_` + count + `">Name: ${datafiles.datafile_name} </li>
-
-                            </ul>
-                    </div>
-                </div>
-                <!-- End -->
-            </li>
-                     `;
-
+            let output = "";
+            let datafilesMap = new Map();
+            data["entities"].forEach(function(names) {
+                datafilesMap.set(`${names.datafile_name}`, []);
             });
+            data["history"].forEach(function(datafiles) {
+                // console.log([`${datafiles.tablespace_name}`, `${datafiles.datafile_name}`])
+                if (datafilesMap.has(`${datafiles.datafile_name}`)) {
+                    datafilesMap.set(`${datafiles.datafile_name}`, [
+                        `${datafiles.tablespace_name}`,
+                        `${datafiles.datafile_name}`,
+                        `${datafiles.total}`,
+                        `${datafiles.free}`,
+                        `${datafiles.used}`,
+                    ]);
+                }
+            });
+            console.log(tablespaceMap);
 
-            document.getElementById('output').innerHTML = output;
+            for (const [key, value] of datafilesMap.entries()) {
+                count++;
+                output +=
+                    `
+                <tr>
+                    <td id="name_` +
+                    count +
+                    `">${value[0]}</td>
+                    <td id="total_` +
+                    count +
+                    `">${value[1]}</td>
+                    <td id="free_` +
+                    count +
+                    `">${value[2]}</td>
+                    <td id="used_` +
+                    count +
+                    `">${value[3]}</td>
+                    <td id="used_` +
+                    count +
+                    `">${value[4]}</td>
+
+                </tr>       
+          
+                     `;
+            }
+
+            document.getElementById("output").innerHTML = output;
         })
-        .catch(err => {
+        .catch((err) => {
             console.log("Error Getting Data From API");
         });
 }
