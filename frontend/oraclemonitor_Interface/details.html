@@ -64,7 +64,7 @@
                 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
                     <div
                         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                        <h1 class="h2">Dashboard</h1>
+                        <h1 class="h2" id="tablespace"> </h1>
                         <div class="btn-toolbar mb-2 mb-md-0">
                             <button type="button" class="btn btn-sm btn-outline-secondary" id="forceRefresh"
                                 onClick="start(localStorage.getItem('time'))">Force Refresh</button>
@@ -95,21 +95,33 @@
                         </div>
                     </div>
 
-                    <div class="row row-cols-2">
-                        <div class="col-5"> <canvas class="my-4" id="myChart" width="500" height="300"></canvas></div>
-                        <div class="col-7">
-                            <h2>Tablespace Details</h2>
+                    <div class="row">
+                        <div class="col d-flex justify-content-center">
+                            <div class="card" style="width: 18rem;">
+                                <ul class="list-group list-group-flush" id="tablespaceDetails">
+
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class=" col d-flex justify-content-center"> <canvas class="my-4" id="myTablespaceChart"
+                                width="500" height="300"></canvas></div>
+                        <div class="col d-flex justify-content-center"> <canvas class="my-4" id="myDatafileChart"
+                                width="500" height="300"></canvas></div>
+                        <div class="w-100"></div>
+                        <div class="col">
+                            <h2>Associated Datafiles</h2>
                             <div class="table-responsive">
                                 <table class="table table-striped table-sm">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Total (MB)</th>
+                                            <th>Datafile Name</th>
+                                            <th>Total (MB) </th>
                                             <th>Free (MB)</th>
                                             <th>Used (MB)</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="output">
+                                    <tbody id="datafile_output">
                                     </tbody>
                                 </table>
                                 <!-- End -->
@@ -124,24 +136,19 @@
         </div>
         <footer class="footer mt-auto py-3">
             <div class="container">
-                <span class="text-muted">Place sticky footer content here.</span>
+                <span class="text-muted">Oracle Monitor | AEBD 2020</span>
             </div>
         </footer>
 
         <!-- Bootstrap core JavaScript
     ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
             crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
             crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-            crossorigin="anonymous"></script>
-
-
 
         <!-- Icons -->
         <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
@@ -152,9 +159,18 @@
         <!-- Graphs -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
         <script type="text/javascript">
+            function getUrlParam() {
+                const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
+                return urlParams.get('tablespace');
+            }
+
             function start(arg) {
-                fetchTablespaceHistory(arg);
-                getTableSpaces(arg);
+                document.getElementById('tablespace').innerText = `Tablespace: ${getUrlParam()}`;
+                getTablespaceDetailGraph(getUrlParam(), arg);
+                getTablespaceDetails(getUrlParam(), arg);
+                getDatafileDetails(getUrlParam(), arg);
+                getDatafileDetailGraph(getUrlParam(), arg);
             }
 
             window.onload = function () {
