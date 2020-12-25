@@ -152,7 +152,7 @@
         }
 
         function start(arg) {
-            document.getElementById('tablespace').innerText = getUrlParam();
+            document.getElementById('tablespace').innerText = `Tablespace: ${getUrlParam()}`;
             getTablespaceDetailGraph(getUrlParam(), arg);
             getTablespaceDetails(getUrlParam(), arg);
             getDatafileDetails(getUrlParam(), arg);

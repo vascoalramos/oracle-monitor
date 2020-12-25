@@ -621,19 +621,15 @@ function getTablespaceDetails(name, argument) {
                         `${tablespace.total}`,
                         `${tablespace.free}`,
                         `${tablespace.used}`,
-                        `${tablespace.percentage_used}`,
                         `${tablespace.percentage_free}`,
-                    ])
+                        `${tablespace.percentage_used}`
+                    ]);
                 };
             });
             for (const [key, value] of tablespaceMap.entries()) {
                 count++;
                 output +=
-                    `
-                    <li class="list-group-item" id="d_name_` +
-                    count +
-                    `"><strong>Name: ${value[0]}</strong></li>
-                    <li class="list-group-item" id="d_total_` +
+                    `<li class="list-group-item" id="d_total_` +
                     count +
                     `">Total: ${value[1]}</li>
                     <li class="list-group-item" id="d_free_` +
@@ -644,10 +640,10 @@ function getTablespaceDetails(name, argument) {
                     `">Used: ${value[3]}</li>     
                     <li class="list-group-item" id="d_pused_` +
                     count +
-                    `">Used: ${value[4]} %</li>
+                    `">Free (%): ${value[4]} %</li>
                      <li class="list-group-item" id="d_free_` +
                     count +
-                    `">Used: ${value[5]} %</li> 
+                    `">Used (%): ${value[5]} %</li> 
                      `;
             }
 
