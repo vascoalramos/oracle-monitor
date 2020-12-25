@@ -470,10 +470,13 @@ function getUsers() {
                     `">${user.name}</td>
                 <td id="status_` +
                     count +
-                    `">  <a href="details.html?tablespace=${user.default_tablespace}">${user.default_tablespace}</a></>
+                    `">${user.status}</td>
                 <td id="temp_tablespace_` +
                     count +
                     `"> <a href="details.html?tablespace=${user.temp_tablespace}">${user.temp_tablespace} </a></td>
+                <td id="temp_tablespace_` +
+                    count +
+                    `"> <a href="details.html?tablespace=${user.default_tablespace}">${user.default_tablespace} </a></td>
                 <td id="last_login_` +
                     count +
                     `"> ${user.last_login}</td>
