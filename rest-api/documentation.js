@@ -2,7 +2,7 @@ module.exports = {
     openapi: "3.0.3",
     info: {
         version: "1.2.0",
-        title: "Oracle Montior",
+        title: "Oracle Monitor",
         description: "Oracle Monitor API",
     },
     license: {
