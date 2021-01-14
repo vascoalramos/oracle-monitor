@@ -58,7 +58,7 @@ CREATE temporary tablespace orclmonitor_temp tempfile '/u02/app/oracle/oradata/O
 #### Create User and grant him previleges
 
 ```sql
-CREATE user orcl_monitor IDENTIFIED BY secret;
+CREATE user orcl_monitor IDENTIFIED BY secret DEFAULT TABLESPACE orclmonitor_data TEMPORARY TABLESPACE orclmonitor_temp QUOTA UNLIMITED ON orclmonitor_data;
 SELECT username, common, con_id  FROM cdb_users WHERE username ='ORCL_MONITOR';
 GRANT CREATE MATERIALIZED VIEW, UNLIMITED TABLESPACE, CREATE SESSION, RESOURCE, ALTER ANY MATERIALIZED VIEW, DROP ANY MATERIALIZED VIEW, DROP ANY VIEW, CREATE ANY VIEW TO orcl_monitor;
 ```
